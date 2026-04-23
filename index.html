@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0B0E15" />
+<meta name="description" content="Cadastre-se para ser avisado quando a Soci for lançada. Rede profissional com ambiente próprio." />
+<title>Soci — Acompanhe o lançamento</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    /* Tronco (fundos/surfaces) — dark-first editorial */
+    --tronco-l0-ed: #0B0E15;
+    --tronco-l1-ed: #121722;
+    --tronco-l2-ed: #181E2B;
+    --tronco-l4-ed: #080B11;
+
+    /* Neutros (texto) */
+    --neutro-pure-white: #FFFFFF;
+    --neutro-high: #F1F2F5;
+    --neutro-med-high: #D4D5DB;
+    --neutro-med: #ABACB5;
+    --neutro-low: #7E7F89;
+    --neutro-mute: #55565D;
+
+    /* Borders */
+    --border-subtle: #1E2230;
+    --border-default: #252B3C;
+    --border-strong: #343B4F;
+    --border-creme: #5A5249;
+
+    /* Acentos */
+    --creme-high: #EDE8DF;
+    --creme-med: #BFB5A1;
+    --cobalto-default: #3E5CF5;
+    --cobalto-hover:   #5673FF;
+    --cobalto-pressed: #3048C9;
+    --cobalto-subtle:  #1A2544;
+
+    /* Funcionais */
+    --sucesso-high:  #47B38F;
+    --sucesso-subtle:#0F2B22;
+    --erro-high:     #DA8195;
+    --erro-subtle:   #2D1821;
+    --alerta-high:   #E5A547;
+
+    /* Focus */
+    --focus-ring: var(--cobalto-default);
+
+    /* Tipografia */
+    --font-sans:  "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-serif: "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", serif;
+
+    /* Espaços (base 4) */
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px;
+    --s-6: 24px; --s-7: 32px; --s-8: 40px; --s-9: 48px; --s-10: 64px;
+
+    /* Radius discretos */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+
+  *,*::before,*::after{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  html{ color-scheme: dark; -webkit-text-size-adjust: 100%; }
+  body{
+    background: var(--tronco-l0-ed);
+    color: var(--neutro-med-high);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.55;
+    font-feature-settings: "ss01","cv11";
+    min-height: 100svh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Subtle editorial backdrop — sem gradient mesh, apenas vinheta plana */
+  body::before{
+    content:"";
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(1200px 700px at 50% -10%, rgba(62,92,245,0.06), transparent 60%),
+      radial-gradient(900px 600px at 100% 110%, rgba(237,232,223,0.025), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page{
+    position: relative; z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: var(--s-8) var(--s-5) var(--s-9);
+    display: flex; flex-direction: column; gap: var(--s-8);
+  }
+
+  /* Wordmark — Source Serif 4, fiel ao DS */
+  .mark{
+    display: inline-flex; align-items: baseline; gap: 10px;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    color: var(--neutro-high);
+  }
+  .mark .dot{
+    width: 6px; height: 6px; border-radius: 999px;
+    background: var(--cobalto-default);
+    transform: translateY(-2px);
+  }
+
+  /* Label-caps topo */
+  .kicker{
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--neutro-low);
+  }
+
+  header.hero{
+    display: flex; flex-direction: column; gap: var(--s-5);
+    padding-top: var(--s-4);
+  }
+  .hero h1{
+    font-family: var(--font-serif);
+    font-weight: 500;
+    color: var(--neutro-high);
+    font-size: clamp(32px, 5.2vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .hero h1 .ed{ color: var(--creme-high); font-style: italic; font-weight: 500; }
+  .hero p.lede{
+    font-family: var(--font-serif);
+    font-size: clamp(16px, 2.1vw, 18px);
+    line-height: 1.55;
+    color: var(--neutro-med-high);
+    max-width: 56ch;
+    margin: 0;
+  }
+
+  /* Card do form — surface L1-ed */
+  .card{
+    background: var(--tronco-l1-ed);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--s-7) var(--s-6);
+  }
+  @media (max-width: 520px){
+    .card{ padding: var(--s-6) var(--s-5); }
+  }
+
+  form{ display: flex; flex-direction: column; gap: var(--s-6); }
+
+  fieldset{
+    border: none;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: var(--s-4);
+  }
+  fieldset legend{
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--neutro-low);
+    margin-bottom: var(--s-1);
+  }
+
+  .field{ display: flex; flex-direction: column; gap: var(--s-2); }
+  .field label{
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--neutro-high);
+    line-height: 1.3;
+  }
+  .field .hint{
+    font-size: 13px; color: var(--neutro-low);
+    line-height: 1.45;
+  }
+
+  /* Row 2 colunas desktop */
+  .row-2{
+    display: grid; gap: var(--s-4);
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+  @media (max-width: 520px){ .row-2{ grid-template-columns: 1fr; } }
+
+  input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select{
+    width: 100%;
+    font: inherit;
+    font-size: 15px;
+    color: var(--neutro-high);
+    background: var(--tronco-l4-ed);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease;
+    appearance: none; -webkit-appearance: none;
+  }
+  input::placeholder{ color: var(--neutro-mute); }
+  input:hover, select:hover{ border-color: var(--border-strong); }
+  input:focus-visible, select:focus-visible{
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 1px;
+    border-color: var(--border-strong);
+    box-shadow: inset 0 0 0 1px #000;
+  }
+  input[aria-invalid="true"]{
+    border-color: var(--erro-high);
+    background: var(--erro-subtle);
+  }
+
+  select{
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--neutro-med) 50%),
+      linear-gradient(135deg, var(--neutro-med) 50%, transparent 50%);
+    background-position:
+      calc(100% - 18px) 50%,
+      calc(100% - 13px) 50%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 36px;
+  }
+
+  /* Group de checkboxes */
+  .checks{
+    display: flex; flex-direction: column; gap: var(--s-2);
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.012);
+  }
+  .check{
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer;
+    padding: 6px 2px;
+  }
+  .check input[type="checkbox"]{
+    appearance: none; -webkit-appearance: none;
+    width: 18px; height: 18px;
+    flex: 0 0 18px;
+    margin-top: 2px;
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    background: var(--tronco-l4-ed);
+    display: inline-grid; place-content: center;
+    cursor: pointer;
+    transition: background-color .12s ease, border-color .12s ease;
+  }
+  .check input[type="checkbox"]::after{
+    content:""; width: 10px; height: 10px;
+    transform: scale(0);
+    transition: transform .12s ease;
+    background-color: var(--neutro-pure-white);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+  .check input[type="checkbox"]:checked{
+    background: var(--cobalto-default);
+    border-color: var(--cobalto-default);
+  }
+  .check input[type="checkbox"]:checked::after{ transform: scale(1); }
+  .check input[type="checkbox"]:focus-visible{
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .check span{
+    font-size: 14px;
+    color: var(--neutro-med-high);
+    line-height: 1.4;
+  }
+
+  /* Channel bloco (email + whatsapp) */
+  .channel{
+    display: flex; flex-direction: column; gap: var(--s-3);
+    padding: var(--s-5);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .channel h3{
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--neutro-high);
+    letter-spacing: -0.005em;
+  }
+  .channel .hint{ font-size: 13px; color: var(--neutro-low); margin: -4px 0 4px; }
+
+  /* Error message inline */
+  .err{
+    display: none;
+    font-size: 13px;
+    color: var(--erro-high);
+    line-height: 1.4;
+  }
+  [aria-invalid="true"] + .err,
+  .field.invalid .err{ display: block; }
+
+  /* CTA */
+  .cta-wrap{ display: flex; flex-direction: column; gap: var(--s-3); }
+  button.cta{
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: var(--neutro-pure-white);
+    background: var(--cobalto-default);
+    border: 1px solid var(--cobalto-default);
+    border-radius: var(--radius-md);
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: background-color .14s ease, transform .12s ease;
+    min-height: 48px;
+  }
+  button.cta:hover{ background: var(--cobalto-hover); border-color: var(--cobalto-hover); }
+  button.cta:active{ background: var(--cobalto-pressed); border-color: var(--cobalto-pressed); transform: translateY(1px); }
+  button.cta:focus-visible{
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    box-shadow: inset 0 0 0 1px #000;
+  }
+  button.cta[disabled]{ opacity: 0.55; cursor: not-allowed; }
+
+  .consent{
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--neutro-low);
+    text-align: left;
+  }
+
+  footer{
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--border-subtle);
+    display: flex; flex-direction: column; gap: var(--s-2);
+    font-size: 12px;
+    color: var(--neutro-mute);
+  }
+  footer .brand{ color: var(--neutro-low); }
+
+  /* Success state */
+  .success{
+    display: none;
+    padding: var(--s-7) var(--s-6);
+    border: 1px solid var(--sucesso-high);
+    background: var(--sucesso-subtle);
+    border-radius: var(--radius-lg);
+    text-align: left;
+  }
+  .success.show{ display: flex; flex-direction: column; gap: var(--s-3); }
+  .success .kicker{ color: var(--sucesso-high); }
+  .success h2{
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    color: var(--neutro-high);
+    font-size: 28px;
+    line-height: 1.15;
+  }
+  .success p{ margin: 0; color: var(--neutro-med-high); }
+
+  /* Loading spinner inline */
+  .spinner{
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-top-color: #fff;
+    border-radius: 999px;
+    animation: spin .8s linear infinite;
+    vertical-align: -2px;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Banner de erro geral */
+  .banner-erro{
+    display: none;
+    padding: 12px 14px;
+    border: 1px solid var(--erro-high);
+    background: var(--erro-subtle);
+    color: var(--neutro-high);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+  }
+  .banner-erro.show{ display: block; }
+
+  .sr-only{
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+</style>
+</head>
+
+<body>
+  <main class="page">
+    <a class="mark" href="/" aria-label="Soci">
+      <span>Soci</span><span class="dot" aria-hidden="true"></span>
+    </a>
+
+    <header class="hero">
+      <span class="kicker">Soci · Pré-lançamento · Beta fechada</span>
+      <h1><span class="ed">Acompanhe</span> o lançamento da&nbsp;Soci.</h1>
+      <p class="lede">
+        Uma rede profissional com ambiente próprio — pensada pra adultos que estão construindo algo, sem ruído de feed social. Deixe seu contato e avisamos quando abrirmos.
+      </p>
+    </header>
+
+    <section id="form-wrap">
+      <form id="waitlist" class="card" novalidate autocomplete="on">
+        <div id="banner-erro" class="banner-erro" role="alert" aria-live="polite"></div>
+
+        <fieldset>
+          <legend>Sobre você</legend>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="nome">Nome</label>
+              <input id="nome" name="nome" type="text" autocomplete="name" required minlength="2" maxlength="120" placeholder="Como você quer ser chamado" />
+              <span class="err">Informe seu nome.</span>
+            </div>
+            <div class="field">
+              <label for="idade">Idade</label>
+              <input id="idade" name="idade" type="number" inputmode="numeric" min="13" max="120" step="1" placeholder="Ex: 28" required />
+              <span class="err">Informe uma idade válida.</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="origem">Por onde você conheceu a Soci?</label>
+            <select id="origem" name="origem" required>
+              <option value="" disabled selected>Selecione uma opção</option>
+              <option value="instagram">Instagram</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="indicacao">Indicação</option>
+              <option value="amigos">Amigos</option>
+              <option value="evento">Evento</option>
+              <option value="outro">Outro</option>
+            </select>
+            <span class="err">Selecione uma opção.</span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Como prefere receber novidades</legend>
+
+          <div class="channel" id="ch-email">
+            <h3>E-mail</h3>
+            <p class="hint">Deixe seu e-mail e marque como quer ser avisado.</p>
+            <div class="field">
+              <label for="email" class="sr-only">Endereço de e-mail</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="seu@email.com" />
+              <span class="err">Informe um e-mail válido.</span>
+            </div>
+            <div class="checks" role="group" aria-label="Preferências de e-mail">
+              <label class="check">
+                <input type="checkbox" id="email_lancamento" name="email_lancamento" value="sim" />
+                <span>Sim, quero receber um aviso sobre o lançamento.</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="email_atualizacoes" name="email_atualizacoes" value="sim" />
+                <span>Sim, quero receber atualizações sobre o app.</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="channel" id="ch-whats">
+            <h3>WhatsApp</h3>
+            <p class="hint">Se preferir, também podemos avisar por WhatsApp.</p>
+            <div class="field">
+              <label for="whatsapp" class="sr-only">Número com DDD</label>
+              <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel-national" placeholder="(11) 91234-5678" maxlength="16" />
+              <span class="err">Informe um número válido com DDD.</span>
+            </div>
+            <div class="checks" role="group" aria-label="Preferências de WhatsApp">
+              <label class="check">
+                <input type="checkbox" id="whats_lancamento" name="whats_lancamento" value="sim" />
+                <span>Sim, quero receber aviso de quando o app for lançado.</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="whats_atualizacoes" name="whats_atualizacoes" value="sim" />
+                <span>Sim, quero receber atualizações sobre o app.</span>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Honeypot anti-spam -->
+        <div aria-hidden="true" style="position:absolute; left:-9999px; top:-9999px;">
+          <label>Se você é humano, deixe em branco
+            <input type="text" name="empresa_hp" tabindex="-1" autocomplete="off" />
+          </label>
+        </div>
+
+        <div class="cta-wrap">
+          <button type="submit" class="cta" id="submit-btn">Quero acompanhar o lançamento</button>
+          <p class="consent">
+            Ao enviar, você concorda com o uso dos seus dados exclusivamente para comunicações sobre o lançamento e atualizações da Soci, conforme a LGPD. Você pode pedir a remoção a qualquer momento.
+          </p>
+        </div>
+      </form>
+
+      <aside id="success" class="success" role="status" aria-live="polite">
+        <span class="kicker">Cadastro confirmado</span>
+        <h2>Está combinado.</h2>
+        <p>Assim que a Soci abrir as portas, você será uma das primeiras pessoas a saber — pelos canais que você escolheu. Obrigado por querer construir isso com a gente.</p>
+      </aside>
+    </section>
+
+    <footer>
+      <span class="brand">Soci · 2026</span>
+      <span>Seus dados são tratados conforme a LGPD e nunca compartilhados com terceiros.</span>
+    </footer>
+  </main>
+
+<script>
+  // ===== CONFIG =====
+  // Cole aqui a URL do Web App do Google Apps Script depois de publicar.
+  // Ver passo a passo em SETUP.md.
+  const ENDPOINT_URL = "__APPS_SCRIPT_URL__";
+
+  // ===== Helpers =====
+  const $ = sel => document.querySelector(sel);
+  const form = $("#waitlist");
+  const btn  = $("#submit-btn");
+  const banner = $("#banner-erro");
+  const successBox = $("#success");
+
+  // Máscara telefone BR: (DD) 9XXXX-XXXX ou (DD) XXXX-XXXX
+  const tel = $("#whatsapp");
+  tel.addEventListener("input", () => {
+    let v = tel.value.replace(/\D/g,"").slice(0,11);
+    if (v.length > 10) {
+      tel.value = v.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, "($1) $2-$3");
+    } else if (v.length > 6) {
+      tel.value = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+    } else if (v.length > 2) {
+      tel.value = v.replace(/^(\d{2})(\d{0,5}).*/, "($1) $2");
+    } else if (v.length > 0) {
+      tel.value = v.replace(/^(\d{0,2}).*/, "($1");
+    }
+  });
+
+  function setInvalid(id, invalid){
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.setAttribute("aria-invalid", invalid ? "true" : "false");
+    el.closest(".field")?.classList.toggle("invalid", invalid);
+  }
+
+  function isEmailValid(v){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+  }
+  function digits(s){ return (s||"").replace(/\D/g,""); }
+
+  function validate(data){
+    let ok = true;
+    const problems = [];
+    setInvalid("nome", false);
+    setInvalid("idade", false);
+    setInvalid("origem", false);
+    setInvalid("email", false);
+    setInvalid("whatsapp", false);
+
+    if (!data.nome || data.nome.length < 2){ setInvalid("nome", true); ok=false; problems.push("nome"); }
+
+    const idadeNum = Number(data.idade);
+    if (!Number.isFinite(idadeNum) || idadeNum < 13 || idadeNum > 120){
+      setInvalid("idade", true); ok=false; problems.push("idade");
+    }
+
+    if (!data.origem){ setInvalid("origem", true); ok=false; problems.push("origem"); }
+
+    const quaisquerEmail = data.email_lancamento || data.email_atualizacoes;
+    const quaisquerWhats = data.whats_lancamento || data.whats_atualizacoes;
+
+    // Precisa escolher ao menos um canal
+    if (!quaisquerEmail && !quaisquerWhats){
+      ok = false;
+      problems.push("canal");
+    }
+
+    // Se marcou e-mail → precisa e-mail válido
+    if (quaisquerEmail){
+      if (!data.email || !isEmailValid(data.email)){
+        setInvalid("email", true); ok=false; problems.push("email");
+      }
+    } else if (data.email && !isEmailValid(data.email)){
+      setInvalid("email", true); ok=false; problems.push("email");
+    }
+
+    // Se marcou WhatsApp → precisa número 10-11 dígitos
+    if (quaisquerWhats){
+      const d = digits(data.whatsapp);
+      if (d.length < 10 || d.length > 11){
+        setInvalid("whatsapp", true); ok=false; problems.push("whatsapp");
+      }
+    } else if (data.whatsapp){
+      const d = digits(data.whatsapp);
+      if (d.length && (d.length < 10 || d.length > 11)){
+        setInvalid("whatsapp", true); ok=false; problems.push("whatsapp");
+      }
+    }
+
+    return { ok, problems };
+  }
+
+  function readForm(){
+    const fd = new FormData(form);
+    const get = k => (fd.get(k) || "").toString().trim();
+    const isOn = k => form.elements[k]?.checked ? "sim" : "";
+    return {
+      nome: get("nome"),
+      idade: get("idade"),
+      origem: get("origem"),
+      email: get("email"),
+      email_lancamento: isOn("email_lancamento"),
+      email_atualizacoes: isOn("email_atualizacoes"),
+      whatsapp: get("whatsapp"),
+      whatsapp_digits: digits(get("whatsapp")),
+      whats_lancamento: isOn("whats_lancamento"),
+      whats_atualizacoes: isOn("whats_atualizacoes"),
+      empresa_hp: get("empresa_hp"),
+      timestamp: new Date().toISOString(),
+      pagina: location.href,
+      user_agent: navigator.userAgent
+    };
+  }
+
+  function showBanner(msg){
+    banner.textContent = msg;
+    banner.classList.add("show");
+  }
+  function hideBanner(){
+    banner.classList.remove("show");
+  }
+
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    hideBanner();
+
+    const data = readForm();
+
+    // Honeypot: se preenchido, finge sucesso pra bot
+    if (data.empresa_hp){
+      form.style.display = "none";
+      successBox.classList.add("show");
+      return;
+    }
+
+    const { ok, problems } = validate(data);
+    if (!ok){
+      const map = {
+        nome: "informe seu nome",
+        idade: "informe uma idade válida",
+        origem: "selecione como conheceu a Soci",
+        email: "e-mail inválido",
+        whatsapp: "número de WhatsApp inválido",
+        canal: "marque pelo menos uma opção de aviso (e-mail ou WhatsApp)"
+      };
+      const primeiro = problems[0];
+      showBanner("Revise o formulário: " + (map[primeiro] || "campos obrigatórios"));
+      const firstInvalid = form.querySelector('[aria-invalid="true"]');
+      firstInvalid?.focus();
+      return;
+    }
+
+    // UI: loading
+    btn.disabled = true;
+    const originalLabel = btn.textContent;
+    btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>Enviando…';
+
+    try {
+      if (!ENDPOINT_URL || ENDPOINT_URL.startsWith("__")){
+        // Sem endpoint configurado: persiste em localStorage + exibe sucesso.
+        // Troque ENDPOINT_URL no topo do arquivo quando publicar o Apps Script.
+        const pendentes = JSON.parse(localStorage.getItem("soci_waitlist_pendentes") || "[]");
+        pendentes.push(data);
+        localStorage.setItem("soci_waitlist_pendentes", JSON.stringify(pendentes));
+      } else {
+        // Envia pra Apps Script. Usamos text/plain pra evitar preflight CORS.
+        await fetch(ENDPOINT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(data)
+        });
+      }
+      form.style.display = "none";
+      successBox.classList.add("show");
+      successBox.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (err){
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+      showBanner("Algo não funcionou ao enviar. Tente novamente em instantes.");
+    }
+  });
+</script>
+</body>
+</html>
