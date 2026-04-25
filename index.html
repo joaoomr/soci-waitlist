@@ -619,6 +619,16 @@
     padding-right: 36px;
   }
 
+  /* Campo condicional de detalhe da origem */
+  .origem-det{
+    animation: detSlide .22s ease-out;
+  }
+  @keyframes detSlide{
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .origem-det[hidden]{ display: none !important; }
+
   /* Tag "opcional" inline no label */
   .opt-tag{
     font-size: 10.5px; font-weight: 500;
@@ -1065,12 +1075,20 @@
             <option value="" disabled selected>Selecione uma opção</option>
             <option value="instagram">Instagram</option>
             <option value="linkedin">LinkedIn</option>
-            <option value="indicacao">Indicação</option>
+            <option value="liga-estudantil">Liga estudantil</option>
+            <option value="indicacao-usuario">Indicação de usuário Soci</option>
             <option value="amigos">Amigos</option>
-            <option value="evento">Evento</option>
-            <option value="outro">Outro</option>
+            <option value="faculdade">Na faculdade</option>
+            <option value="trabalho">No trabalho</option>
+            <option value="outros">Outros</option>
           </select>
           <span class="err">Selecione uma opção.</span>
+        </div>
+
+        <div class="field origem-det" id="origem-det-wrap" hidden>
+          <label for="origem_detalhe" id="origem-det-label">Conta um pouco mais?</label>
+          <input id="origem_detalhe" name="origem_detalhe" type="text" maxlength="160" placeholder="Conta um pouco" autocomplete="off" />
+          <span class="err">Conta um pouco mais.</span>
         </div>
 
         <!-- Honeypot -->
@@ -1153,6 +1171,31 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
+  // ===== Origem: campo de detalhe condicional =====
+  const detalheCfg = {
+    "liga-estudantil": { label: "Qual liga estudantil?", placeholder: "Ex: Liga de Empreendedorismo da USP" },
+    "faculdade":       { label: "Qual faculdade?",       placeholder: "Ex: USP, FGV, Insper" },
+    "trabalho":        { label: "Qual empresa ou contexto?", placeholder: "Onde foi" },
+    "outros":          { label: "Conta um pouco mais?",  placeholder: "Como ficou sabendo" }
+  };
+  const origemSel = document.getElementById("origem");
+  const detWrap   = document.getElementById("origem-det-wrap");
+  const detLabel  = document.getElementById("origem-det-label");
+  const detInput  = document.getElementById("origem_detalhe");
+  origemSel.addEventListener("change", () => {
+    const cfg = detalheCfg[origemSel.value];
+    if (cfg){
+      detLabel.textContent = cfg.label;
+      detInput.placeholder = cfg.placeholder;
+      detWrap.hidden = false;
+    } else {
+      detWrap.hidden = true;
+      detInput.value = "";
+      detInput.removeAttribute("aria-invalid");
+      detInput.closest(".field")?.classList.remove("invalid");
+    }
+  });
+
   // ===== Form =====
   const form = $("#waitlist");
   const btn  = $("#submit-btn");
@@ -1186,10 +1229,16 @@
   function validate(data){
     let ok = true;
     const problems = [];
-    ["nome","email","origem","whatsapp"].forEach(id => setInvalid(id, false));
+    ["nome","email","origem","origem_detalhe","whatsapp"].forEach(id => setInvalid(id, false));
 
     if (!data.nome || data.nome.length < 2){ setInvalid("nome", true); ok=false; problems.push("nome"); }
     if (!data.origem){ setInvalid("origem", true); ok=false; problems.push("origem"); }
+
+    // Origens que exigem detalhe
+    const exigeDetalhe = ["liga-estudantil","faculdade","trabalho","outros"].includes(data.origem);
+    if (exigeDetalhe && (!data.origem_detalhe || data.origem_detalhe.length < 2)){
+      setInvalid("origem_detalhe", true); ok=false; problems.push("origem_detalhe");
+    }
 
     const quaisquerEmail = data.email_lancamento || data.email_atualizacoes;
     const quaisquerWhats = data.whats_lancamento || data.whats_atualizacoes;
@@ -1222,6 +1271,7 @@
       nome: get("nome"),
       idade: "",
       origem: get("origem"),
+      origem_detalhe: get("origem_detalhe"),
       email: get("email"),
       email_lancamento: isOn("email_lancamento"),
       email_atualizacoes: isOn("email_atualizacoes"),
@@ -1257,8 +1307,9 @@
         nome: "informe seu nome",
         email: "e-mail inválido",
         origem: "selecione como conheceu a Soci",
+        origem_detalhe: "complete o detalhe sobre como conheceu a Soci",
         whatsapp: "número de WhatsApp inválido",
-        canal: "marque pelo menos uma opção de aviso (e-mail ou WhatsApp)"
+        canal: "marque pelo menos uma opção de aviso (WhatsApp ou e-mail)"
       };
       showBanner("Revise o formulário: " + (map[problems[0]] || "campos obrigatórios"));
       form.querySelector('[aria-invalid="true"]')?.focus();
