@@ -15,7 +15,8 @@
 
 const SHEET_NAME = "Respostas";
 
-// Cabeçalhos da aba (ordem importa)
+// Cabeçalhos da aba (ordem importa — campos novos sempre no FIM
+// pra não misalinhar dados ja gravados em deploys anteriores)
 const HEADERS = [
   "timestamp_envio",
   "nome",
@@ -30,7 +31,8 @@ const HEADERS = [
   "whats_atualizacoes",
   "pagina",
   "user_agent",
-  "ip_hash"
+  "ip_hash",
+  "origem_detalhe"
 ];
 
 function doPost(e) {
@@ -74,7 +76,8 @@ function doPost(e) {
       payload.whats_atualizacoes || "",
       (payload.pagina || "").toString().slice(0, 500),
       (payload.user_agent || "").toString().slice(0, 500),
-      "" // ip_hash — Apps Script não expõe IP diretamente
+      "", // ip_hash — Apps Script não expõe IP diretamente
+      (payload.origem_detalhe || "").toString().slice(0, 200)
     ];
 
     sheet.appendRow(row);

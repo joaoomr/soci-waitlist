@@ -75,7 +75,7 @@ Ordem exata na aba `Respostas`:
 | 1 | `timestamp_envio` | ISO 8601 | gerado no client |
 | 2 | `nome` | texto | obrigatório |
 | 3 | `idade` | number | 13–120 |
-| 4 | `origem` | select | instagram, linkedin, indicacao, amigos, evento, outro |
+| 4 | `origem` | select | instagram, linkedin, liga-estudantil, indicacao-usuario, amigos, faculdade, trabalho, outros |
 | 5 | `email` | email | opcional — exigido se marcou avisos por e-mail |
 | 6 | `email_aviso_lancamento` | "sim"/"" | checkbox |
 | 7 | `email_atualizacoes` | "sim"/"" | checkbox |
@@ -86,6 +86,7 @@ Ordem exata na aba `Respostas`:
 | 12 | `pagina` | URL | útil pra UTMs futuros |
 | 13 | `user_agent` | string | diagnóstico |
 | 14 | `ip_hash` | vazio | campo reservado |
+| 15 | `origem_detalhe` | texto livre | preenchido quando origem = liga-estudantil, faculdade, trabalho ou outros |
 
 Esse layout é amigável pra importar em **Supabase**, **Airtable**, **HubSpot**, **n8n**, **Zapier** ou **Make**.
 
