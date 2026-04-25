@@ -1028,9 +1028,35 @@
         </div>
 
         <div class="field">
+          <label for="whatsapp">WhatsApp</label>
+          <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel-national" placeholder="(11) 91234-5678" maxlength="16" />
+          <span class="err">Informe um número válido com DDD.</span>
+        </div>
+        <div class="checks" role="group" aria-label="Consentimento de WhatsApp">
+          <label class="check">
+            <input type="checkbox" id="whats_lancamento" name="whats_lancamento" value="sim" checked />
+            <span>Quero receber o aviso de lançamento por WhatsApp.</span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="whats_atualizacoes" name="whats_atualizacoes" value="sim" />
+            <span>Também quero receber atualizações por WhatsApp.</span>
+          </label>
+        </div>
+
+        <div class="field">
           <label for="email">E-mail</label>
-          <input id="email" name="email" type="email" autocomplete="email" required placeholder="seu@email.com" />
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="seu@email.com" />
           <span class="err">Informe um e-mail válido.</span>
+        </div>
+        <div class="checks" role="group" aria-label="Consentimento de e-mail">
+          <label class="check">
+            <input type="checkbox" id="email_lancamento" name="email_lancamento" value="sim" />
+            <span>Quero receber o aviso de lançamento por e-mail.</span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="email_atualizacoes" name="email_atualizacoes" value="sim" />
+            <span>Também quero receber atualizações sobre o produto.</span>
+          </label>
         </div>
 
         <div class="field">
@@ -1045,33 +1071,6 @@
             <option value="outro">Outro</option>
           </select>
           <span class="err">Selecione uma opção.</span>
-        </div>
-
-        <div class="checks" role="group" aria-label="Consentimento de e-mail">
-          <label class="check">
-            <input type="checkbox" id="email_lancamento" name="email_lancamento" value="sim" checked />
-            <span>Quero receber o aviso de lançamento por e-mail.</span>
-          </label>
-          <label class="check">
-            <input type="checkbox" id="email_atualizacoes" name="email_atualizacoes" value="sim" />
-            <span>Também quero receber atualizações sobre o produto.</span>
-          </label>
-        </div>
-
-        <div class="field">
-          <label for="whatsapp">WhatsApp <span class="opt-tag">opcional</span></label>
-          <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel-national" placeholder="(11) 91234-5678" maxlength="16" />
-          <span class="err">Informe um número válido com DDD.</span>
-        </div>
-        <div class="checks" role="group" aria-label="Consentimento de WhatsApp">
-          <label class="check">
-            <input type="checkbox" id="whats_lancamento" name="whats_lancamento" value="sim" />
-            <span>Quero receber o aviso de lançamento por WhatsApp.</span>
-          </label>
-          <label class="check">
-            <input type="checkbox" id="whats_atualizacoes" name="whats_atualizacoes" value="sim" />
-            <span>Também quero receber atualizações por WhatsApp.</span>
-          </label>
         </div>
 
         <!-- Honeypot -->
@@ -1190,7 +1189,6 @@
     ["nome","email","origem","whatsapp"].forEach(id => setInvalid(id, false));
 
     if (!data.nome || data.nome.length < 2){ setInvalid("nome", true); ok=false; problems.push("nome"); }
-    if (!data.email || !isEmailValid(data.email)){ setInvalid("email", true); ok=false; problems.push("email"); }
     if (!data.origem){ setInvalid("origem", true); ok=false; problems.push("origem"); }
 
     const quaisquerEmail = data.email_lancamento || data.email_atualizacoes;
@@ -1198,12 +1196,20 @@
 
     if (!quaisquerEmail && !quaisquerWhats){ ok=false; problems.push("canal"); }
 
+    // WhatsApp: required se algum check de WA marcado, ou se preenchido (formato)
     if (quaisquerWhats){
       const d = digits(data.whatsapp);
       if (d.length < 10 || d.length > 11){ setInvalid("whatsapp", true); ok=false; problems.push("whatsapp"); }
     } else if (data.whatsapp){
       const d = digits(data.whatsapp);
       if (d.length && (d.length < 10 || d.length > 11)){ setInvalid("whatsapp", true); ok=false; problems.push("whatsapp"); }
+    }
+
+    // E-mail: required se algum check de e-mail marcado, ou validar formato se preenchido
+    if (quaisquerEmail){
+      if (!data.email || !isEmailValid(data.email)){ setInvalid("email", true); ok=false; problems.push("email"); }
+    } else if (data.email && !isEmailValid(data.email)){
+      setInvalid("email", true); ok=false; problems.push("email");
     }
     return { ok, problems };
   }
