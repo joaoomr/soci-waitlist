@@ -338,92 +338,121 @@
     margin-top: var(--s-2);
   }
 
-  /* ----- Switch demo ----- */
-  .sw-deck{
+  /* ----- Conexões card (Explorar-style) ----- */
+  .cn-card{
     position: relative;
     width: 100%; max-width: 320px;
-    height: 220px;
-  }
-  .sw-card{
-    position: absolute; inset: 0;
-    border-radius: var(--radius-md);
     background: var(--tronco-l2-ed);
     border: 1px solid var(--border-strong);
-    padding: 16px 18px;
-    display: flex; flex-direction: column; gap: 10px;
-    transition: transform .42s cubic-bezier(.22,.7,.25,1), opacity .42s ease;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+    display: flex; flex-direction: column;
   }
-  .sw-card[data-pos="back"]{
-    transform: translate(-22px, 22px) scale(0.94);
-    opacity: 0.55;
-    z-index: 1;
+  .cn-cover{
+    height: 56px;
+    background:
+      linear-gradient(135deg, rgba(62,92,245,0.55), rgba(62,92,245,0.18) 60%, transparent),
+      linear-gradient(180deg, var(--tronco-l1-ed), var(--tronco-l2-ed));
+    border-bottom: 1px solid var(--border-subtle);
   }
-  .sw-card[data-pos="mid"]{
-    transform: translate(-11px, 11px) scale(0.97);
-    opacity: 0.78;
-    z-index: 2;
+  .cn-body{
+    padding: 0 18px 16px;
+    display: flex; flex-direction: column; gap: 12px;
+    margin-top: -22px;
   }
-  .sw-card[data-pos="front"]{
-    transform: translate(0,0) scale(1);
-    opacity: 1;
-    z-index: 3;
+  .cn-head{
+    display: flex; align-items: center; gap: 12px;
   }
-  .sw-card .row{ display: flex; align-items: center; gap: 10px; }
-  .sw-avatar{
-    width: 36px; height: 36px; border-radius: 999px;
+  .cn-avatar{
+    width: 48px; height: 48px;
+    border-radius: 999px;
     display: inline-flex; align-items: center; justify-content: center;
-    font-family: var(--font-sans); font-weight: 600; font-size: 13px;
+    font-family: var(--font-sans); font-weight: 600; font-size: 15px;
     color: var(--neutro-pure-white);
+    background: var(--cobalto-default);
+    border: 2px solid var(--tronco-l2-ed);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
     flex-shrink: 0;
   }
-  .sw-card .meta{ display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .sw-card .meta .nm{ font-size: 14px; font-weight: 600; color: var(--neutro-high); }
-  .sw-card .meta .ctx{ font-size: 12px; color: var(--neutro-low); }
-  .sw-card .body{
-    margin-top: 4px;
-    padding-top: 10px;
-    border-top: 1px solid var(--border-subtle);
-    display: flex; flex-direction: column; gap: 6px;
-    font-size: 12.5px;
-    color: var(--neutro-med);
-    line-height: 1.5;
-  }
-  .sw-card .body .line{
-    display: flex; align-items: center; gap: 8px;
-  }
-  .sw-card .body .dot{
-    width: 4px; height: 4px; border-radius: 999px;
-    background: var(--neutro-mute);
-  }
-  .sw-card[data-tone="cobalto"] .sw-avatar{ background: var(--cobalto-default); }
-  .sw-card[data-tone="creme"]   .sw-avatar{ background: var(--creme-med); color: #1B1810; }
-  .sw-card[data-tone="verde"]   .sw-avatar{ background: var(--sucesso-high); }
-
-  .sw-pills{
-    display: flex; gap: 6px;
-    margin-top: var(--s-5);
-    align-self: flex-start;
-  }
-  .sw-pill{
-    font: inherit;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--neutro-med);
-    background: transparent;
-    border: 1px solid var(--border-default);
-    border-radius: 999px;
-    padding: 6px 12px;
-    cursor: pointer;
-    transition: color .14s ease, border-color .14s ease, background-color .14s ease;
-  }
-  .sw-pill:hover{ color: var(--neutro-high); border-color: var(--border-strong); }
-  .sw-pill[aria-pressed="true"]{
+  .cn-meta{ display: flex; flex-direction: column; gap: 2px; min-width: 0; padding-top: 18px; }
+  .cn-name{
+    font-family: var(--font-sans);
+    font-size: 15px; font-weight: 600;
     color: var(--neutro-high);
-    background: var(--cobalto-subtle);
-    border-color: #2A3A6E;
+    letter-spacing: -0.005em;
   }
-  .sw-pill:focus-visible{ outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .cn-role{
+    font-size: 12px;
+    color: var(--neutro-low);
+  }
+  .cn-bio{
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--neutro-med);
+  }
+  .cn-tags{ display: flex; flex-wrap: wrap; gap: 6px; }
+  .cn-tag{
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid;
+  }
+  .cn-tag.tag-interest{
+    color: #B8C7FF;
+    background: rgba(62,92,245,0.10);
+    border-color: rgba(62,92,245,0.28);
+  }
+  .cn-tag.tag-expertise{
+    color: #93D9BC;
+    background: rgba(71,179,143,0.10);
+    border-color: rgba(71,179,143,0.28);
+  }
+  .cn-tag.tag-objective{
+    color: #F0CD8A;
+    background: rgba(229,165,71,0.10);
+    border-color: rgba(229,165,71,0.30);
+  }
+  .cn-actions{
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px;
+    padding: 14px 18px 18px;
+    border-top: 1px solid var(--border-subtle);
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.18));
+  }
+  .cn-btn{
+    width: 44px; height: 44px;
+    border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border-strong);
+    background: var(--tronco-l1-ed);
+    cursor: pointer;
+    color: var(--neutro-med);
+    transition: transform .14s ease, color .14s ease, border-color .14s ease, background-color .14s ease, box-shadow .14s ease;
+  }
+  .cn-btn:hover{ transform: translateY(-2px); }
+  .cn-btn:active{ transform: translateY(0); }
+  .cn-btn:focus-visible{ outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .cn-pass:hover{
+    color: var(--erro-high);
+    border-color: rgba(218,129,149,0.45);
+    background: rgba(218,129,149,0.08);
+    box-shadow: 0 6px 18px rgba(218,129,149,0.18);
+  }
+  .cn-follow:hover{
+    color: var(--cobalto-hover);
+    border-color: rgba(86,115,255,0.5);
+    background: rgba(62,92,245,0.10);
+    box-shadow: 0 6px 18px rgba(62,92,245,0.22);
+  }
+  .cn-like:hover{
+    color: var(--sucesso-high);
+    border-color: rgba(71,179,143,0.5);
+    background: rgba(71,179,143,0.08);
+    box-shadow: 0 6px 18px rgba(71,179,143,0.18);
+  }
 
   /* ----- Liga snapshot ----- */
   .lg-card{
@@ -590,43 +619,17 @@
     padding-right: 36px;
   }
 
-  /* Toggle WhatsApp */
-  .opt-toggle{
-    display: inline-flex; align-items: center; gap: 8px;
-    background: transparent;
-    border: 1px dashed var(--border-strong);
-    color: var(--neutro-med);
-    font: inherit; font-size: 13.5px; font-weight: 500;
-    padding: 10px 14px;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    align-self: flex-start;
-    transition: color .14s ease, border-color .14s ease, background-color .14s ease;
-  }
-  .opt-toggle:hover{ color: var(--neutro-high); border-color: var(--neutro-low); }
-  .opt-toggle[aria-expanded="true"]{
-    color: var(--neutro-high);
-    border-style: solid;
-    border-color: var(--border-default);
-    background: rgba(255,255,255,0.02);
-  }
-  .opt-toggle .sign{
-    width: 14px; height: 14px;
-    display: inline-flex; align-items: center; justify-content: center;
+  /* Tag "opcional" inline no label */
+  .opt-tag{
+    font-size: 10.5px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
     color: var(--neutro-low);
-    transition: transform .2s ease;
+    padding: 2px 8px;
+    margin-left: 6px;
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    vertical-align: 1px;
   }
-  .opt-toggle[aria-expanded="true"] .sign{ transform: rotate(45deg); }
-
-  .opt-panel{
-    display: none;
-    flex-direction: column; gap: var(--s-4);
-    padding: var(--s-5);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    background: rgba(255,255,255,0.012);
-  }
-  .opt-panel.open{ display: flex; }
 
   /* Checks (consents) */
   .checks{
@@ -838,7 +841,7 @@
         <span class="kicker"><span class="pulse" aria-hidden="true"></span>Pré-lançamento · Beta fechada</span>
         <h1><span class="ed">Acompanhe</span> o lançamento<br/>da Soci.</h1>
         <p class="lede">
-          Uma rede profissional com ambiente próprio — pra adultos que estão construindo algo. Sem feed barulhento, sem métrica de vaidade. Deixe seu contato e avisamos quando abrirmos.
+          A rede profissional que conecta todo o seu ecossistema de trabalho. A Soci nasceu da necessidade de conectar pessoas que já trabalham juntas, direta ou indiretamente, mas que ainda não se conhecem. Acreditamos que o ecossistema profissional vai muito além do organograma.
         </p>
         <div class="cta-row">
           <a class="btn btn-primary" href="#waitlist-form">Entrar na lista</a>
@@ -856,10 +859,10 @@
       </div>
       <div class="marker-item">
         <span class="label">Acesso</span>
-        <span class="value">Por convite, em ondas</span>
+        <span class="value">Por convite</span>
       </div>
       <div class="marker-item">
-        <span class="label">Onde</span>
+        <span class="label">Disponível em</span>
         <span class="value">Web e mobile</span>
       </div>
     </div>
@@ -869,80 +872,69 @@
   <section class="shell tight" aria-labelledby="mech-title">
     <div class="section-head">
       <span class="kicker">Como funciona</span>
-      <h2 id="mech-title">Switch e Liga.<br/>A mecânica que define a Soci.</h2>
+      <h2 id="mech-title">Conexões e Liga.<br/>A mecânica que define a Soci.</h2>
       <p>Dois conceitos fazem o produto. O resto é consequência.</p>
     </div>
 
     <div class="mech-grid">
 
-      <!-- SWITCH -->
+      <!-- CONEXÕES -->
       <article class="mech-card">
         <div class="head">
           <div class="name">
             <span class="icn" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M7 6L3 10L7 14" stroke="#5673FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M3 10H16C18.21 10 20 11.79 20 14" stroke="#5673FF" stroke-width="1.6" stroke-linecap="round"/>
-                <path d="M17 18L21 14L17 10" stroke="#BFB5A1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M21 14H8C5.79 14 4 12.21 4 10" stroke="#BFB5A1" stroke-width="1.6" stroke-linecap="round"/>
+                <circle cx="9" cy="8" r="3.2" stroke="#5673FF" stroke-width="1.5"/>
+                <path d="M3.5 19c0-2.8 2.46-5 5.5-5s5.5 2.2 5.5 5" stroke="#5673FF" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="17" cy="6" r="2.2" stroke="#BFB5A1" stroke-width="1.5"/>
+                <path d="M14 11.6c.7-.4 1.6-.6 2.5-.6 2.2 0 4 1.6 4 3.6" stroke="#BFB5A1" stroke-width="1.5" stroke-linecap="round"/>
               </svg>
             </span>
-            Switch
+            Conexões
           </div>
           <p class="desc">
-            Alterne entre perfis com um toque. Cada um é um ambiente separado — seu lado profissional, seu projeto, sua liga. Sem misturar contexto, sem poluir timeline.
+            Encontre pessoas por afinidade profissional real. Passe, siga ou curta — quando há match, a conversa começa em ambiente próprio.
           </p>
         </div>
 
         <div class="mech-stage">
-          <div class="sw-deck" id="sw-deck" aria-live="polite">
-            <div class="sw-card" data-tone="cobalto" data-id="0" data-pos="front">
-              <div class="row">
-                <div class="sw-avatar" aria-hidden="true">JR</div>
-                <div class="meta">
-                  <span class="nm">Júlia Reis</span>
-                  <span class="ctx">Fundadora · Soci</span>
+          <div class="cn-card" aria-label="Exemplo de conexão">
+            <div class="cn-cover" aria-hidden="true"></div>
+            <div class="cn-body">
+              <div class="cn-head">
+                <div class="cn-avatar" aria-hidden="true">MR</div>
+                <div class="cn-meta">
+                  <div class="cn-name">Marina Reis</div>
+                  <div class="cn-role">UX Researcher · São Paulo</div>
                 </div>
               </div>
-              <div class="body">
-                <div class="line"><span class="dot"></span>Construindo a Soci</div>
-                <div class="line"><span class="dot"></span>Liga: Founders SP</div>
-                <div class="line"><span class="dot"></span>Aberto a parcerias</div>
+              <p class="cn-bio">Pesquisa qualitativa em produtos B2B. Procurando parceria com design ops.</p>
+              <div class="cn-tags">
+                <span class="cn-tag tag-interest">Pesquisa</span>
+                <span class="cn-tag tag-expertise">UX Research</span>
+                <span class="cn-tag tag-objective">Mentoria</span>
               </div>
             </div>
-            <div class="sw-card" data-tone="creme" data-id="1" data-pos="mid">
-              <div class="row">
-                <div class="sw-avatar" aria-hidden="true">JR</div>
-                <div class="meta">
-                  <span class="nm">Júlia · Mentoria</span>
-                  <span class="ctx">Coach de produto</span>
-                </div>
-              </div>
-              <div class="body">
-                <div class="line"><span class="dot"></span>3 sessões esta semana</div>
-                <div class="line"><span class="dot"></span>Disponível qua/sex</div>
-              </div>
-            </div>
-            <div class="sw-card" data-tone="verde" data-id="2" data-pos="back">
-              <div class="row">
-                <div class="sw-avatar" aria-hidden="true">JR</div>
-                <div class="meta">
-                  <span class="nm">Estúdio Reis</span>
-                  <span class="ctx">Identidade visual</span>
-                </div>
-              </div>
-              <div class="body">
-                <div class="line"><span class="dot"></span>Portfólio aberto</div>
-                <div class="line"><span class="dot"></span>2 vagas em maio</div>
-              </div>
+            <div class="cn-actions" role="group" aria-label="Ações de conexão">
+              <button type="button" class="cn-btn cn-pass" aria-label="Passa">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 6 6 18"/><path d="M6 6l12 12"/>
+                </svg>
+              </button>
+              <button type="button" class="cn-btn cn-follow" aria-label="Seguir">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M19 8v6"/><path d="M22 11h-6"/>
+                </svg>
+              </button>
+              <button type="button" class="cn-btn cn-like" aria-label="Curtir">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
             </div>
           </div>
-        </div>
-
-        <div class="sw-pills" role="group" aria-label="Trocar de perfil">
-          <button type="button" class="sw-pill" data-target="0" aria-pressed="true">Soci</button>
-          <button type="button" class="sw-pill" data-target="1" aria-pressed="false">Mentoria</button>
-          <button type="button" class="sw-pill" data-target="2" aria-pressed="false">Estúdio</button>
         </div>
       </article>
 
@@ -1010,12 +1002,9 @@
   <section class="shell" aria-labelledby="intro-title">
     <div class="intro">
       <span class="kicker">Sobre a Soci</span>
-      <h2 id="intro-title">A rede de quem constrói junto.</h2>
+      <h2 id="intro-title">Muito além de uma rede social.<br/>Um mapa do seu mundo profissional.</h2>
       <p>
-        A Soci é uma rede profissional com ambiente próprio — pensada pra adultos que estão construindo algo de verdade. Sem ruído de feed social, sem métricas de vaidade. Aqui o foco é conexão real entre quem faz acontecer.
-      </p>
-      <p>
-        A vitrine abre sem cadastro. Explore as páginas institucionais, entenda o produto e decida com calma se faz sentido pra você. A lista de espera é só pra você ser avisado primeiro quando abrirmos.
+        A Soci organiza as relações profissionais que importam para você. Se você é autônomo, gestor ou fundador, sua rede de trabalho envolve fornecedores, prestadores, parceiros, colaboradores e clientes. A Soci conecta todas essas pontas.
       </p>
     </div>
   </section>
@@ -1069,31 +1058,20 @@
           </label>
         </div>
 
-        <button type="button" class="opt-toggle" id="toggle-whats" aria-expanded="false" aria-controls="whats-panel">
-          <span class="sign" aria-hidden="true">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M6 1V11M1 6H11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-            </svg>
-          </span>
-          Também quero aviso por WhatsApp
-        </button>
-
-        <div class="opt-panel" id="whats-panel" hidden>
-          <div class="field">
-            <label for="whatsapp">Número com DDD</label>
-            <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel-national" placeholder="(11) 91234-5678" maxlength="16" />
-            <span class="err">Informe um número válido com DDD.</span>
-          </div>
-          <div class="checks" role="group" aria-label="Consentimento de WhatsApp">
-            <label class="check">
-              <input type="checkbox" id="whats_lancamento" name="whats_lancamento" value="sim" />
-              <span>Quero receber o aviso de lançamento por WhatsApp.</span>
-            </label>
-            <label class="check">
-              <input type="checkbox" id="whats_atualizacoes" name="whats_atualizacoes" value="sim" />
-              <span>Também quero receber atualizações por WhatsApp.</span>
-            </label>
-          </div>
+        <div class="field">
+          <label for="whatsapp">WhatsApp <span class="opt-tag">opcional</span></label>
+          <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel-national" placeholder="(11) 91234-5678" maxlength="16" />
+          <span class="err">Informe um número válido com DDD.</span>
+        </div>
+        <div class="checks" role="group" aria-label="Consentimento de WhatsApp">
+          <label class="check">
+            <input type="checkbox" id="whats_lancamento" name="whats_lancamento" value="sim" />
+            <span>Quero receber o aviso de lançamento por WhatsApp.</span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="whats_atualizacoes" name="whats_atualizacoes" value="sim" />
+            <span>Também quero receber atualizações por WhatsApp.</span>
+          </label>
         </div>
 
         <!-- Honeypot -->
@@ -1175,42 +1153,6 @@
   const onScroll = () => topbar.classList.toggle("scrolled", window.scrollY > 8);
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
-
-  // ===== Switch demo =====
-  const deck = $("#sw-deck");
-  const pills = $$(".sw-pill");
-  const order = ["front","mid","back"];
-  function setActive(targetId){
-    const cards = Array.from(deck.querySelectorAll(".sw-card"));
-    const n = cards.length;
-    cards.forEach(c => {
-      const id = Number(c.dataset.id);
-      const offset = (id - targetId + n) % n;
-      c.dataset.pos = order[offset] || "back";
-    });
-    pills.forEach(p => p.setAttribute("aria-pressed", String(Number(p.dataset.target) === targetId)));
-  }
-  pills.forEach(p => p.addEventListener("click", () => setActive(Number(p.dataset.target))));
-  // Auto-rotate (sem reduced motion)
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches){
-    let cur = 0;
-    let timer = setInterval(() => {
-      cur = (cur + 1) % 3;
-      setActive(cur);
-    }, 4200);
-    deck.parentElement.addEventListener("mouseenter", () => clearInterval(timer));
-    pills.forEach(p => p.addEventListener("click", () => clearInterval(timer)));
-  }
-
-  // ===== WhatsApp toggle =====
-  const wToggle = $("#toggle-whats");
-  const wPanel = $("#whats-panel");
-  wToggle.addEventListener("click", () => {
-    const open = wPanel.classList.toggle("open");
-    wPanel.hidden = !open;
-    wToggle.setAttribute("aria-expanded", String(open));
-    if (open){ setTimeout(() => $("#whatsapp")?.focus(), 60); }
-  });
 
   // ===== Form =====
   const form = $("#waitlist");
