@@ -19,7 +19,7 @@
     --tronco-l2-ed: #181E2B;
     --tronco-l4-ed: #080B11;
 
-    /* Neutros (texto) */
+    /* Neutros */
     --neutro-pure-white: #FFFFFF;
     --neutro-high: #F1F2F5;
     --neutro-med-high: #D4D5DB;
@@ -48,26 +48,26 @@
     --erro-subtle:   #2D1821;
     --alerta-high:   #E5A547;
 
-    /* Focus */
     --focus-ring: var(--cobalto-default);
 
-    /* Tipografia */
     --font-sans:  "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --font-serif: "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", serif;
 
-    /* Espaços (base 4) */
     --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px;
     --s-6: 24px; --s-7: 32px; --s-8: 40px; --s-9: 48px; --s-10: 64px;
+    --s-12: 80px; --s-14: 112px;
 
-    /* Radius discretos */
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 14px;
+
+    --max-w: 1080px;
+    --col-w: 720px;
   }
 
   *,*::before,*::after{ box-sizing: border-box; }
   html,body{ margin:0; padding:0; }
-  html{ color-scheme: dark; -webkit-text-size-adjust: 100%; }
+  html{ color-scheme: dark; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
   body{
     background: var(--tronco-l0-ed);
     color: var(--neutro-med-high);
@@ -80,33 +80,57 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Subtle editorial backdrop — sem gradient mesh, apenas vinheta plana */
+  /* Vinheta editorial — sutil, sem mesh */
   body::before{
     content:"";
     position: fixed; inset: 0;
     background:
-      radial-gradient(1200px 700px at 50% -10%, rgba(62,92,245,0.06), transparent 60%),
-      radial-gradient(900px 600px at 100% 110%, rgba(237,232,223,0.025), transparent 60%);
+      radial-gradient(1400px 800px at 50% -10%, rgba(62,92,245,0.07), transparent 60%),
+      radial-gradient(1000px 700px at 100% 110%, rgba(237,232,223,0.022), transparent 60%);
     pointer-events: none;
     z-index: 0;
   }
 
-  .page{
+  /* ===== Layout ===== */
+  .shell{
     position: relative; z-index: 1;
-    max-width: 640px;
+    max-width: var(--max-w);
     margin: 0 auto;
-    padding: var(--s-8) var(--s-5) var(--s-9);
-    display: flex; flex-direction: column; gap: var(--s-8);
+    padding: 0 var(--s-6);
   }
+  @media (max-width: 520px){ .shell{ padding: 0 var(--s-5); } }
 
-  /* Wordmark — Source Serif 4, fiel ao DS */
+  /* ===== Topbar ===== */
+  .topbar{
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    background: linear-gradient(to bottom, rgba(11,14,21,0.82), rgba(11,14,21,0.62));
+    border-bottom: 1px solid transparent;
+    transition: border-color .18s ease, background .18s ease;
+  }
+  .topbar.scrolled{
+    border-bottom-color: var(--border-subtle);
+    background: rgba(11,14,21,0.92);
+  }
+  .topbar-inner{
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 14px var(--s-6);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--s-4);
+  }
+  @media (max-width: 520px){ .topbar-inner{ padding: 12px var(--s-5); } }
+
+  /* Wordmark */
   .mark{
-    display: inline-flex; align-items: baseline; gap: 10px;
+    display: inline-flex; align-items: baseline; gap: 8px;
     font-family: var(--font-serif);
     font-weight: 500;
-    font-size: 22px;
+    font-size: 20px;
     letter-spacing: -0.01em;
     color: var(--neutro-high);
+    text-decoration: none;
   }
   .mark .dot{
     width: 6px; height: 6px; border-radius: 999px;
@@ -114,63 +138,410 @@
     transform: translateY(-2px);
   }
 
-  /* Label-caps topo */
+  .nav-link{
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--neutro-med);
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    transition: color .14s ease, background-color .14s ease;
+  }
+  .nav-link:hover{ color: var(--neutro-high); background: rgba(255,255,255,0.03); }
+  .nav-link .arr{ display: inline-block; margin-left: 4px; opacity: .7; }
+
+  /* ===== Kicker ===== */
   .kicker{
     font-family: var(--font-sans);
     font-weight: 500;
     font-size: 11px;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--neutro-low);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .kicker .pulse{
+    width: 6px; height: 6px; border-radius: 999px;
+    background: var(--cobalto-default);
+    box-shadow: 0 0 0 0 rgba(62,92,245,0.55);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow: 0 0 0 0 rgba(62,92,245,0.45); }
+    70%{ box-shadow: 0 0 0 8px rgba(62,92,245,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(62,92,245,0); }
   }
 
-  header.hero{
-    display: flex; flex-direction: column; gap: var(--s-5);
-    padding-top: var(--s-4);
+  /* ===== Hero ===== */
+  .hero{
+    padding: clamp(56px, 9vw, 96px) 0 clamp(48px, 7vw, 72px);
+    max-width: var(--col-w);
   }
+  .hero .stack{ display: flex; flex-direction: column; gap: var(--s-6); }
   .hero h1{
     font-family: var(--font-serif);
     font-weight: 500;
     color: var(--neutro-high);
-    font-size: clamp(32px, 5.2vw, 48px);
-    line-height: 1.08;
-    letter-spacing: -0.015em;
+    font-size: clamp(36px, 6.4vw, 60px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
     margin: 0;
   }
   .hero h1 .ed{ color: var(--creme-high); font-style: italic; font-weight: 500; }
   .hero p.lede{
     font-family: var(--font-serif);
-    font-size: clamp(16px, 2.1vw, 18px);
+    font-size: clamp(17px, 1.9vw, 20px);
     line-height: 1.55;
     color: var(--neutro-med-high);
     max-width: 56ch;
     margin: 0;
   }
+  .hero .cta-row{
+    display: flex; flex-wrap: wrap; gap: var(--s-3);
+    margin-top: var(--s-2);
+  }
 
-  /* Card do form — surface L1-ed */
+  /* ===== Buttons ===== */
+  .btn{
+    font: inherit;
+    font-size: 14.5px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background-color .14s ease, border-color .14s ease, color .14s ease, transform .12s ease;
+    border: 1px solid transparent;
+    min-height: 44px;
+    line-height: 1;
+  }
+  .btn-primary{
+    background: var(--cobalto-default);
+    border-color: var(--cobalto-default);
+    color: var(--neutro-pure-white);
+  }
+  .btn-primary:hover{ background: var(--cobalto-hover); border-color: var(--cobalto-hover); }
+  .btn-primary:active{ background: var(--cobalto-pressed); transform: translateY(1px); }
+  .btn-secondary{
+    background: transparent;
+    border-color: var(--border-strong);
+    color: var(--neutro-high);
+  }
+  .btn-secondary:hover{ border-color: var(--neutro-low); background: rgba(255,255,255,0.025); }
+  .btn:focus-visible{
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .btn[disabled]{ opacity: 0.55; cursor: not-allowed; }
+
+  /* ===== Marker line (data lançamento) ===== */
+  .marker{
+    display: flex; align-items: center; gap: var(--s-4);
+    padding: var(--s-5) 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--s-10);
+    flex-wrap: wrap;
+  }
+  .marker-item{
+    display: flex; flex-direction: column; gap: 2px;
+    padding-right: var(--s-6);
+    border-right: 1px solid var(--border-subtle);
+  }
+  .marker-item:last-child{ border-right: none; padding-right: 0; }
+  .marker-item .label{
+    font-size: 10.5px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--neutro-low);
+  }
+  .marker-item .value{
+    font-family: var(--font-serif);
+    font-size: 16px; font-weight: 500;
+    color: var(--neutro-high);
+    letter-spacing: -0.005em;
+  }
+
+  /* ===== Section ===== */
+  section{ padding: clamp(64px, 9vw, 96px) 0; }
+  section.tight{ padding-top: 0; }
+  .section-head{
+    display: flex; flex-direction: column; gap: var(--s-3);
+    max-width: 56ch;
+    margin-bottom: var(--s-10);
+  }
+  .section-head h2{
+    font-family: var(--font-serif);
+    font-weight: 500;
+    color: var(--neutro-high);
+    font-size: clamp(26px, 3.6vw, 36px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .section-head p{
+    margin: 0;
+    color: var(--neutro-med);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 52ch;
+  }
+
+  /* ===== Mecânica grid ===== */
+  .mech-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-5);
+  }
+  @media (max-width: 860px){ .mech-grid{ grid-template-columns: 1fr; } }
+
+  .mech-card{
+    background: var(--tronco-l1-ed);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--s-7);
+    display: flex; flex-direction: column; gap: var(--s-6);
+    min-height: 460px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mech-card .head{ display: flex; flex-direction: column; gap: var(--s-3); }
+  .mech-card .name{
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--neutro-high);
+    letter-spacing: -0.01em;
+  }
+  .mech-card .name .icn{
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-sm);
+    background: var(--cobalto-subtle);
+    border: 1px solid #1F2C50;
+  }
+  .mech-card .desc{
+    color: var(--neutro-med);
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 42ch;
+  }
+
+  .mech-stage{
+    flex: 1;
+    position: relative;
+    min-height: 240px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: var(--s-2);
+  }
+
+  /* ----- Switch demo ----- */
+  .sw-deck{
+    position: relative;
+    width: 100%; max-width: 320px;
+    height: 220px;
+  }
+  .sw-card{
+    position: absolute; inset: 0;
+    border-radius: var(--radius-md);
+    background: var(--tronco-l2-ed);
+    border: 1px solid var(--border-strong);
+    padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: transform .42s cubic-bezier(.22,.7,.25,1), opacity .42s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+  .sw-card[data-pos="back"]{
+    transform: translate(-22px, 22px) scale(0.94);
+    opacity: 0.55;
+    z-index: 1;
+  }
+  .sw-card[data-pos="mid"]{
+    transform: translate(-11px, 11px) scale(0.97);
+    opacity: 0.78;
+    z-index: 2;
+  }
+  .sw-card[data-pos="front"]{
+    transform: translate(0,0) scale(1);
+    opacity: 1;
+    z-index: 3;
+  }
+  .sw-card .row{ display: flex; align-items: center; gap: 10px; }
+  .sw-avatar{
+    width: 36px; height: 36px; border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-sans); font-weight: 600; font-size: 13px;
+    color: var(--neutro-pure-white);
+    flex-shrink: 0;
+  }
+  .sw-card .meta{ display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .sw-card .meta .nm{ font-size: 14px; font-weight: 600; color: var(--neutro-high); }
+  .sw-card .meta .ctx{ font-size: 12px; color: var(--neutro-low); }
+  .sw-card .body{
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-subtle);
+    display: flex; flex-direction: column; gap: 6px;
+    font-size: 12.5px;
+    color: var(--neutro-med);
+    line-height: 1.5;
+  }
+  .sw-card .body .line{
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sw-card .body .dot{
+    width: 4px; height: 4px; border-radius: 999px;
+    background: var(--neutro-mute);
+  }
+  .sw-card[data-tone="cobalto"] .sw-avatar{ background: var(--cobalto-default); }
+  .sw-card[data-tone="creme"]   .sw-avatar{ background: var(--creme-med); color: #1B1810; }
+  .sw-card[data-tone="verde"]   .sw-avatar{ background: var(--sucesso-high); }
+
+  .sw-pills{
+    display: flex; gap: 6px;
+    margin-top: var(--s-5);
+    align-self: flex-start;
+  }
+  .sw-pill{
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--neutro-med);
+    background: transparent;
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: color .14s ease, border-color .14s ease, background-color .14s ease;
+  }
+  .sw-pill:hover{ color: var(--neutro-high); border-color: var(--border-strong); }
+  .sw-pill[aria-pressed="true"]{
+    color: var(--neutro-high);
+    background: var(--cobalto-subtle);
+    border-color: #2A3A6E;
+  }
+  .sw-pill:focus-visible{ outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  /* ----- Liga snapshot ----- */
+  .lg-card{
+    width: 100%; max-width: 360px;
+    background: var(--tronco-l2-ed);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    display: flex; flex-direction: column; gap: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+  .lg-head{ display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s-3); }
+  .lg-head .nm{
+    font-family: var(--font-serif);
+    font-size: 16px; font-weight: 500;
+    color: var(--neutro-high);
+    letter-spacing: -0.005em;
+  }
+  .lg-head .nm small{
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--neutro-low);
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .lg-tag{
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sucesso-high);
+    padding: 4px 8px;
+    background: var(--sucesso-subtle);
+    border: 1px solid rgba(71,179,143,0.25);
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .lg-members{ display: flex; align-items: center; gap: 8px; }
+  .lg-stack{ display: flex; }
+  .lg-av{
+    width: 28px; height: 28px; border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600;
+    color: var(--neutro-pure-white);
+    border: 2px solid var(--tronco-l2-ed);
+    margin-left: -8px;
+  }
+  .lg-av:first-child{ margin-left: 0; }
+  .lg-av-count{
+    font-size: 12px;
+    color: var(--neutro-med);
+    margin-left: 4px;
+  }
+  .lg-build{
+    font-size: 13px;
+    color: var(--neutro-med-high);
+    line-height: 1.5;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+  }
+  .lg-build b{ color: var(--neutro-high); font-weight: 600; }
+  .lg-feed{ display: flex; flex-direction: column; gap: 8px; }
+  .lg-feed .item{
+    display: flex; align-items: baseline; gap: 8px;
+    font-size: 12.5px;
+    color: var(--neutro-med);
+    line-height: 1.5;
+  }
+  .lg-feed .item .who{ color: var(--neutro-high); font-weight: 500; }
+  .lg-feed .item .ts{ color: var(--neutro-mute); margin-left: auto; font-size: 11.5px; }
+
+  /* ===== Intro editorial ===== */
+  .intro{
+    max-width: 60ch;
+    display: flex; flex-direction: column; gap: var(--s-5);
+  }
+  .intro h2{
+    font-family: var(--font-serif);
+    font-weight: 500;
+    color: var(--neutro-high);
+    font-size: clamp(26px, 3.6vw, 36px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .intro p{
+    margin: 0;
+    color: var(--neutro-med-high);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .intro p + p{ color: var(--neutro-med); }
+
+  /* ===== Form ===== */
+  .form-wrap{
+    max-width: var(--col-w);
+  }
   .card{
     background: var(--tronco-l1-ed);
     border: 1px solid var(--border-default);
     border-radius: var(--radius-lg);
-    padding: var(--s-7) var(--s-6);
+    padding: var(--s-9) var(--s-8);
   }
   @media (max-width: 520px){
-    .card{ padding: var(--s-6) var(--s-5); }
+    .card{ padding: var(--s-7) var(--s-5); }
   }
 
   form{ display: flex; flex-direction: column; gap: var(--s-6); }
-
-  fieldset{
-    border: none;
-    margin: 0; padding: 0;
-    display: flex; flex-direction: column; gap: var(--s-4);
-  }
+  fieldset{ border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-4); }
   fieldset legend{
     font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-weight: 500; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--neutro-low);
     margin-bottom: var(--s-1);
   }
@@ -178,24 +549,13 @@
   .field{ display: flex; flex-direction: column; gap: var(--s-2); }
   .field label{
     font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 14px; font-weight: 500;
     color: var(--neutro-high);
     line-height: 1.3;
   }
-  .field .hint{
-    font-size: 13px; color: var(--neutro-low);
-    line-height: 1.45;
-  }
+  .field .hint{ font-size: 13px; color: var(--neutro-low); line-height: 1.45; }
 
-  /* Row 2 colunas desktop */
-  .row-2{
-    display: grid; gap: var(--s-4);
-    grid-template-columns: 1.2fr 0.8fr;
-  }
-  @media (max-width: 520px){ .row-2{ grid-template-columns: 1fr; } }
-
-  input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select{
+  input[type="text"], input[type="email"], input[type="tel"], select{
     width: 100%;
     font: inherit;
     font-size: 15px;
@@ -224,26 +584,58 @@
     background-image:
       linear-gradient(45deg, transparent 50%, var(--neutro-med) 50%),
       linear-gradient(135deg, var(--neutro-med) 50%, transparent 50%);
-    background-position:
-      calc(100% - 18px) 50%,
-      calc(100% - 13px) 50%;
+    background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
     background-size: 5px 5px, 5px 5px;
     background-repeat: no-repeat;
     padding-right: 36px;
   }
 
-  /* Group de checkboxes */
-  .checks{
-    display: flex; flex-direction: column; gap: var(--s-2);
-    padding: var(--s-3) var(--s-4);
+  /* Toggle WhatsApp */
+  .opt-toggle{
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent;
+    border: 1px dashed var(--border-strong);
+    color: var(--neutro-med);
+    font: inherit; font-size: 13.5px; font-weight: 500;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    align-self: flex-start;
+    transition: color .14s ease, border-color .14s ease, background-color .14s ease;
+  }
+  .opt-toggle:hover{ color: var(--neutro-high); border-color: var(--neutro-low); }
+  .opt-toggle[aria-expanded="true"]{
+    color: var(--neutro-high);
+    border-style: solid;
+    border-color: var(--border-default);
+    background: rgba(255,255,255,0.02);
+  }
+  .opt-toggle .sign{
+    width: 14px; height: 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--neutro-low);
+    transition: transform .2s ease;
+  }
+  .opt-toggle[aria-expanded="true"] .sign{ transform: rotate(45deg); }
+
+  .opt-panel{
+    display: none;
+    flex-direction: column; gap: var(--s-4);
+    padding: var(--s-5);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     background: rgba(255,255,255,0.012);
   }
+  .opt-panel.open{ display: flex; }
+
+  /* Checks (consents) */
+  .checks{
+    display: flex; flex-direction: column; gap: var(--s-2);
+  }
   .check{
     display: flex; align-items: flex-start; gap: 10px;
     cursor: pointer;
-    padding: 6px 2px;
+    padding: 4px 0;
   }
   .check input[type="checkbox"]{
     appearance: none; -webkit-appearance: none;
@@ -270,48 +662,23 @@
   }
   .check input[type="checkbox"]:checked::after{ transform: scale(1); }
   .check input[type="checkbox"]:focus-visible{
-    outline: 2px solid var(--focus-ring);
-    outline-offset: 2px;
+    outline: 2px solid var(--focus-ring); outline-offset: 2px;
   }
   .check span{
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--neutro-med-high);
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
-  /* Channel bloco (email + whatsapp) */
-  .channel{
-    display: flex; flex-direction: column; gap: var(--s-3);
-    padding: var(--s-5);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-  }
-  .channel h3{
-    margin: 0;
-    font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--neutro-high);
-    letter-spacing: -0.005em;
-  }
-  .channel .hint{ font-size: 13px; color: var(--neutro-low); margin: -4px 0 4px; }
-
-  /* Error message inline */
-  .err{
-    display: none;
-    font-size: 13px;
-    color: var(--erro-high);
-    line-height: 1.4;
-  }
+  /* Inline error */
+  .err{ display: none; font-size: 13px; color: var(--erro-high); line-height: 1.4; }
   [aria-invalid="true"] + .err,
   .field.invalid .err{ display: block; }
 
-  /* CTA */
   .cta-wrap{ display: flex; flex-direction: column; gap: var(--s-3); }
   button.cta{
     font: inherit;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 15px; font-weight: 600;
     letter-spacing: -0.005em;
     color: var(--neutro-pure-white);
     background: var(--cobalto-default);
@@ -325,62 +692,19 @@
   button.cta:hover{ background: var(--cobalto-hover); border-color: var(--cobalto-hover); }
   button.cta:active{ background: var(--cobalto-pressed); border-color: var(--cobalto-pressed); transform: translateY(1px); }
   button.cta:focus-visible{
-    outline: 2px solid var(--focus-ring);
-    outline-offset: 2px;
+    outline: 2px solid var(--focus-ring); outline-offset: 2px;
     box-shadow: inset 0 0 0 1px #000;
   }
   button.cta[disabled]{ opacity: 0.55; cursor: not-allowed; }
 
   .consent{
     font-size: 12.5px;
-    line-height: 1.5;
+    line-height: 1.55;
     color: var(--neutro-low);
-    text-align: left;
   }
+  .consent a{ color: var(--neutro-med); text-decoration: underline; text-underline-offset: 2px; }
 
-  footer{
-    padding-top: var(--s-5);
-    border-top: 1px solid var(--border-subtle);
-    display: flex; flex-direction: column; gap: var(--s-2);
-    font-size: 12px;
-    color: var(--neutro-mute);
-  }
-  footer .brand{ color: var(--neutro-low); }
-
-  /* Success state */
-  .success{
-    display: none;
-    padding: var(--s-7) var(--s-6);
-    border: 1px solid var(--sucesso-high);
-    background: var(--sucesso-subtle);
-    border-radius: var(--radius-lg);
-    text-align: left;
-  }
-  .success.show{ display: flex; flex-direction: column; gap: var(--s-3); }
-  .success .kicker{ color: var(--sucesso-high); }
-  .success h2{
-    margin: 0;
-    font-family: var(--font-serif);
-    font-weight: 500;
-    color: var(--neutro-high);
-    font-size: 28px;
-    line-height: 1.15;
-  }
-  .success p{ margin: 0; color: var(--neutro-med-high); }
-
-  /* Loading spinner inline */
-  .spinner{
-    display: inline-block; width: 14px; height: 14px;
-    border: 2px solid rgba(255,255,255,0.35);
-    border-top-color: #fff;
-    border-radius: 999px;
-    animation: spin .8s linear infinite;
-    vertical-align: -2px;
-    margin-right: 8px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* Banner de erro geral */
+  /* Banner erro */
   .banner-erro{
     display: none;
     padding: 12px 14px;
@@ -392,158 +716,387 @@
   }
   .banner-erro.show{ display: block; }
 
+  /* Loading */
+  .spinner{
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-top-color: #fff;
+    border-radius: 999px;
+    animation: spin .8s linear infinite;
+    vertical-align: -2px;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Success */
+  .success{
+    display: none;
+    padding: var(--s-9) var(--s-8);
+    border: 1px solid rgba(71,179,143,0.4);
+    background: linear-gradient(180deg, var(--sucesso-subtle), var(--tronco-l1-ed));
+    border-radius: var(--radius-lg);
+  }
+  @media (max-width: 520px){ .success{ padding: var(--s-7) var(--s-5); } }
+  .success.show{ display: flex; flex-direction: column; gap: var(--s-4); }
+  .success .kicker{ color: var(--sucesso-high); }
+  .success .kicker .pulse{ background: var(--sucesso-high); box-shadow: 0 0 0 0 rgba(71,179,143,0.55); animation: pulse 2.4s ease-out infinite; }
+  .success h2{
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    color: var(--neutro-high);
+    font-size: clamp(28px, 4vw, 36px);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+  .success p{ margin: 0; color: var(--neutro-med-high); max-width: 52ch; }
+  .success .next{
+    margin-top: var(--s-3);
+    display: inline-flex; align-self: flex-start;
+  }
+
+  /* ===== Footer ===== */
+  footer.site{
+    margin-top: clamp(64px, 9vw, 96px);
+    padding: var(--s-8) 0 var(--s-9);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .foot-grid{
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 var(--s-6);
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: var(--s-6); flex-wrap: wrap;
+  }
+  @media (max-width: 520px){ .foot-grid{ padding: 0 var(--s-5); } }
+  .foot-col{ display: flex; flex-direction: column; gap: var(--s-3); }
+  .foot-col .label{
+    font-size: 10.5px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--neutro-mute);
+  }
+  .foot-col .value{ font-size: 13px; color: var(--neutro-med); }
+  .foot-social{ display: flex; gap: 8px; }
+  .foot-social a{
+    width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    color: var(--neutro-med);
+    transition: color .14s ease, border-color .14s ease, background-color .14s ease;
+  }
+  .foot-social a:hover{ color: var(--neutro-high); border-color: var(--border-strong); background: rgba(255,255,255,0.02); }
+  .foot-bottom{
+    max-width: var(--max-w);
+    margin: var(--s-7) auto 0;
+    padding: var(--s-5) var(--s-6) 0;
+    border-top: 1px solid var(--border-subtle);
+    display: flex; justify-content: space-between; gap: var(--s-4);
+    font-size: 12px;
+    color: var(--neutro-mute);
+    flex-wrap: wrap;
+  }
+  @media (max-width: 520px){ .foot-bottom{ padding: var(--s-5) var(--s-5) 0; } }
+
   .sr-only{
     position: absolute; width: 1px; height: 1px;
     padding: 0; margin: -1px; overflow: hidden;
     clip: rect(0 0 0 0); white-space: nowrap; border: 0;
   }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    html{ scroll-behavior: auto; }
+  }
 </style>
 </head>
 
 <body>
-  <main class="page">
+
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
     <a class="mark" href="/" aria-label="Soci">
       <span>Soci</span><span class="dot" aria-hidden="true"></span>
     </a>
-
-    <header class="hero">
-      <span class="kicker">Soci · Pré-lançamento · Beta fechada</span>
-      <h1><span class="ed">Acompanhe</span> o lançamento da&nbsp;Soci.</h1>
-      <p class="lede">
-        Uma rede profissional com ambiente próprio — pensada pra adultos que estão construindo algo, sem ruído de feed social. Deixe seu contato e avisamos quando abrirmos.
-      </p>
-    </header>
-
-
-    <section class="intro-block" aria-label="Sobre a Soci">
-      <h2>A rede de quem constrói junto.</h2>
-      <p>
-        A Soci é uma rede profissional com ambiente próprio — feita pra adultos que estão construindo algo de verdade. Sem ruído de feed social, sem métricas de vaidade. Aqui, o foco é conexão real entre quem faz acontecer.
-      </p>
-      <p>
-        Conheça nossas páginas institucionais e tenha uma prévia do que está por vir. A vitrine abre sem cadastro — explore com calma antes de decidir.
-      </p>
-      <a class="cta-link" href="https://versao-waitlist.vercel.app" target="_blank" rel="noopener noreferrer">
-        Explorar a vitrine →
+    <nav>
+      <a class="nav-link" href="https://versao-waitlist.vercel.app" target="_blank" rel="noopener noreferrer">
+        Explorar a vitrine <span class="arr" aria-hidden="true">↗</span>
       </a>
-    </section>
+    </nav>
+  </div>
+</header>
 
-    <section class="mechanics-block" aria-label="Como a Soci funciona">
-      <h2>Switch e Liga: como a Soci funciona.</h2>
-      <div class="mechanic-item" style="display:flex;flex-direction:row;gap:16px;align-items:flex-start;">
-        <div class="mechanic-icon" style="width:56px;height:56px;min-width:56px;border-radius:14px;background:#1A2544;border:1px solid #252B3C;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 7L4 11L8 15" stroke="#3E5CF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M4 11H18C20.2091 11 22 12.7909 22 15V15" stroke="#3E5CF5" stroke-width="2" stroke-linecap="round"/>
-            <path d="M20 21L24 17L20 13" stroke="#7B93FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M24 17H10C7.79086 17 6 15.2091 6 13V13" stroke="#7B93FF" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="mechanic-text">
-          <h3>Switch</h3>
-          <p>
-            Na Soci, você alterna entre perfis com um toque. Cada perfil é um ambiente separado — seu lado profissional, seu projeto pessoal, sua comunidade. Sem misturar contextos, sem poluir timeline. Você decide o que cada mundo vê de você.
-          </p>
+<main>
+
+  <!-- HERO -->
+  <section class="shell">
+    <div class="hero">
+      <div class="stack">
+        <span class="kicker"><span class="pulse" aria-hidden="true"></span>Pré-lançamento · Beta fechada</span>
+        <h1><span class="ed">Acompanhe</span> o lançamento<br/>da Soci.</h1>
+        <p class="lede">
+          Uma rede profissional com ambiente próprio — pra adultos que estão construindo algo. Sem feed barulhento, sem métrica de vaidade. Deixe seu contato e avisamos quando abrirmos.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#waitlist-form">Entrar na lista</a>
+          <a class="btn btn-secondary" href="https://versao-waitlist.vercel.app" target="_blank" rel="noopener noreferrer">
+            Explorar a vitrine <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </div>
-      <div class="divider" aria-hidden="true"></div>
-      <div class="mechanic-item" style="display:flex;flex-direction:row;gap:16px;align-items:flex-start;">
-        <div class="mechanic-icon" style="width:56px;height:56px;min-width:56px;border-radius:14px;background:#1A2544;border:1px solid #252B3C;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M14 3L5 7V13C5 18.52 8.84 23.74 14 25C19.16 23.74 23 18.52 23 13V7L14 3Z" stroke="#3E5CF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="14" cy="11" r="2.5" stroke="#7B93FF" stroke-width="1.8"/>
-            <path d="M10 18C10 15.79 11.79 14.5 14 14.5C16.21 14.5 18 15.79 18 18" stroke="#7B93FF" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="mechanic-text">
-          <h3>Liga</h3>
-          <p>
-            A Liga é o espaço de quem constrói junto. Grupos com propósito, onde os membros se conectam por projetos reais — não por likes. Cada liga tem seu ambiente, suas regras e seu ritmo. É onde a colaboração acontece de verdade.
+    </div>
+
+    <div class="marker" aria-label="Detalhes do lançamento">
+      <div class="marker-item">
+        <span class="label">Lançamento</span>
+        <span class="value">9 de maio, 2026</span>
+      </div>
+      <div class="marker-item">
+        <span class="label">Acesso</span>
+        <span class="value">Por convite, em ondas</span>
+      </div>
+      <div class="marker-item">
+        <span class="label">Onde</span>
+        <span class="value">Web e mobile</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MECÂNICA -->
+  <section class="shell tight" aria-labelledby="mech-title">
+    <div class="section-head">
+      <span class="kicker">Como funciona</span>
+      <h2 id="mech-title">Switch e Liga.<br/>A mecânica que define a Soci.</h2>
+      <p>Dois conceitos fazem o produto. O resto é consequência.</p>
+    </div>
+
+    <div class="mech-grid">
+
+      <!-- SWITCH -->
+      <article class="mech-card">
+        <div class="head">
+          <div class="name">
+            <span class="icn" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M7 6L3 10L7 14" stroke="#5673FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 10H16C18.21 10 20 11.79 20 14" stroke="#5673FF" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M17 18L21 14L17 10" stroke="#BFB5A1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 14H8C5.79 14 4 12.21 4 10" stroke="#BFB5A1" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            Switch
+          </div>
+          <p class="desc">
+            Alterne entre perfis com um toque. Cada um é um ambiente separado — seu lado profissional, seu projeto, sua liga. Sem misturar contexto, sem poluir timeline.
           </p>
         </div>
-      </div>
-    </section>
 
-    <section id="form-wrap">
+        <div class="mech-stage">
+          <div class="sw-deck" id="sw-deck" aria-live="polite">
+            <div class="sw-card" data-tone="cobalto" data-id="0" data-pos="front">
+              <div class="row">
+                <div class="sw-avatar" aria-hidden="true">JR</div>
+                <div class="meta">
+                  <span class="nm">Júlia Reis</span>
+                  <span class="ctx">Fundadora · Soci</span>
+                </div>
+              </div>
+              <div class="body">
+                <div class="line"><span class="dot"></span>Construindo a Soci</div>
+                <div class="line"><span class="dot"></span>Liga: Founders SP</div>
+                <div class="line"><span class="dot"></span>Aberto a parcerias</div>
+              </div>
+            </div>
+            <div class="sw-card" data-tone="creme" data-id="1" data-pos="mid">
+              <div class="row">
+                <div class="sw-avatar" aria-hidden="true">JR</div>
+                <div class="meta">
+                  <span class="nm">Júlia · Mentoria</span>
+                  <span class="ctx">Coach de produto</span>
+                </div>
+              </div>
+              <div class="body">
+                <div class="line"><span class="dot"></span>3 sessões esta semana</div>
+                <div class="line"><span class="dot"></span>Disponível qua/sex</div>
+              </div>
+            </div>
+            <div class="sw-card" data-tone="verde" data-id="2" data-pos="back">
+              <div class="row">
+                <div class="sw-avatar" aria-hidden="true">JR</div>
+                <div class="meta">
+                  <span class="nm">Estúdio Reis</span>
+                  <span class="ctx">Identidade visual</span>
+                </div>
+              </div>
+              <div class="body">
+                <div class="line"><span class="dot"></span>Portfólio aberto</div>
+                <div class="line"><span class="dot"></span>2 vagas em maio</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sw-pills" role="group" aria-label="Trocar de perfil">
+          <button type="button" class="sw-pill" data-target="0" aria-pressed="true">Soci</button>
+          <button type="button" class="sw-pill" data-target="1" aria-pressed="false">Mentoria</button>
+          <button type="button" class="sw-pill" data-target="2" aria-pressed="false">Estúdio</button>
+        </div>
+      </article>
+
+      <!-- LIGA -->
+      <article class="mech-card">
+        <div class="head">
+          <div class="name">
+            <span class="icn" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3L4 6V12C4 16.5 7.2 20.7 12 22C16.8 20.7 20 16.5 20 12V6L12 3Z" stroke="#5673FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="10" r="2" stroke="#BFB5A1" stroke-width="1.4"/>
+                <path d="M9 16C9 14.34 10.34 13 12 13C13.66 13 15 14.34 15 16" stroke="#BFB5A1" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </span>
+            Liga
+          </div>
+          <p class="desc">
+            O espaço de quem constrói junto. Grupos com propósito, conectados por projeto real — não por like. Cada liga tem seu ambiente, suas regras, seu ritmo.
+          </p>
+        </div>
+
+        <div class="mech-stage">
+          <div class="lg-card" aria-label="Exemplo de liga">
+            <div class="lg-head">
+              <div class="nm">
+                Founders SP
+                <small>Liga · 47 membros</small>
+              </div>
+              <span class="lg-tag">Ativa</span>
+            </div>
+
+            <div class="lg-members">
+              <div class="lg-stack" aria-hidden="true">
+                <span class="lg-av" style="background:#3E5CF5">MR</span>
+                <span class="lg-av" style="background:#BFB5A1;color:#1B1810">JC</span>
+                <span class="lg-av" style="background:#47B38F">AS</span>
+                <span class="lg-av" style="background:#E5A547;color:#1B1810">PT</span>
+                <span class="lg-av" style="background:#DA8195">LM</span>
+              </div>
+              <span class="lg-av-count">+ 42 outros</span>
+            </div>
+
+            <div class="lg-build">
+              <b>Construindo:</b> roda de revisão semanal de pitch deck, abertura segunda 15h.
+            </div>
+
+            <div class="lg-feed">
+              <div class="item">
+                <span><span class="who">Marina</span> publicou um marco</span>
+                <span class="ts">há 2h</span>
+              </div>
+              <div class="item">
+                <span><span class="who">João</span> entrou na liga</span>
+                <span class="ts">ontem</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- INTRO EDITORIAL -->
+  <section class="shell" aria-labelledby="intro-title">
+    <div class="intro">
+      <span class="kicker">Sobre a Soci</span>
+      <h2 id="intro-title">A rede de quem constrói junto.</h2>
+      <p>
+        A Soci é uma rede profissional com ambiente próprio — pensada pra adultos que estão construindo algo de verdade. Sem ruído de feed social, sem métricas de vaidade. Aqui o foco é conexão real entre quem faz acontecer.
+      </p>
+      <p>
+        A vitrine abre sem cadastro. Explore as páginas institucionais, entenda o produto e decida com calma se faz sentido pra você. A lista de espera é só pra você ser avisado primeiro quando abrirmos.
+      </p>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="shell" id="waitlist-form" aria-labelledby="form-title">
+    <div class="section-head">
+      <span class="kicker">Lista de espera</span>
+      <h2 id="form-title">Quero ser avisado.</h2>
+      <p>Três campos, trinta segundos. Avisamos primeiro quem entrou aqui.</p>
+    </div>
+
+    <div class="form-wrap">
       <form id="waitlist" class="card" novalidate autocomplete="on">
         <div id="banner-erro" class="banner-erro" role="alert" aria-live="polite"></div>
 
-        <fieldset>
-          <legend>Sobre você</legend>
+        <div class="field">
+          <label for="nome">Nome</label>
+          <input id="nome" name="nome" type="text" autocomplete="name" required minlength="2" maxlength="120" placeholder="Como você quer ser chamado" />
+          <span class="err">Informe seu nome.</span>
+        </div>
 
-          <div class="row-2">
-            <div class="field">
-              <label for="nome">Nome</label>
-              <input id="nome" name="nome" type="text" autocomplete="name" required minlength="2" maxlength="120" placeholder="Como você quer ser chamado" />
-              <span class="err">Informe seu nome.</span>
-            </div>
-            <div class="field">
-              <label for="idade">Idade</label>
-              <input id="idade" name="idade" type="number" inputmode="numeric" min="13" max="120" step="1" placeholder="Ex: 28" required />
-              <span class="err">Informe uma idade válida.</span>
-            </div>
-          </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" required placeholder="seu@email.com" />
+          <span class="err">Informe um e-mail válido.</span>
+        </div>
 
+        <div class="field">
+          <label for="origem">Por onde conheceu a Soci?</label>
+          <select id="origem" name="origem" required>
+            <option value="" disabled selected>Selecione uma opção</option>
+            <option value="instagram">Instagram</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="indicacao">Indicação</option>
+            <option value="amigos">Amigos</option>
+            <option value="evento">Evento</option>
+            <option value="outro">Outro</option>
+          </select>
+          <span class="err">Selecione uma opção.</span>
+        </div>
+
+        <div class="checks" role="group" aria-label="Consentimento de e-mail">
+          <label class="check">
+            <input type="checkbox" id="email_lancamento" name="email_lancamento" value="sim" checked />
+            <span>Quero receber o aviso de lançamento por e-mail.</span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="email_atualizacoes" name="email_atualizacoes" value="sim" />
+            <span>Também quero receber atualizações sobre o produto.</span>
+          </label>
+        </div>
+
+        <button type="button" class="opt-toggle" id="toggle-whats" aria-expanded="false" aria-controls="whats-panel">
+          <span class="sign" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M6 1V11M1 6H11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Também quero aviso por WhatsApp
+        </button>
+
+        <div class="opt-panel" id="whats-panel" hidden>
           <div class="field">
-            <label for="origem">Por onde você conheceu a Soci?</label>
-            <select id="origem" name="origem" required>
-              <option value="" disabled selected>Selecione uma opção</option>
-              <option value="instagram">Instagram</option>
-              <option value="linkedin">LinkedIn</option>
-              <option value="indicacao">Indicação</option>
-              <option value="amigos">Amigos</option>
-              <option value="evento">Evento</option>
-              <option value="outro">Outro</option>
-            </select>
-            <span class="err">Selecione uma opção.</span>
+            <label for="whatsapp">Número com DDD</label>
+            <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel-national" placeholder="(11) 91234-5678" maxlength="16" />
+            <span class="err">Informe um número válido com DDD.</span>
           </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Como prefere receber novidades</legend>
-
-          <div class="channel" id="ch-email">
-            <h3>E-mail</h3>
-            <p class="hint">Deixe seu e-mail e marque como quer ser avisado.</p>
-            <div class="field">
-              <label for="email" class="sr-only">Endereço de e-mail</label>
-              <input id="email" name="email" type="email" autocomplete="email" placeholder="seu@email.com" />
-              <span class="err">Informe um e-mail válido.</span>
-            </div>
-            <div class="checks" role="group" aria-label="Preferências de e-mail">
-              <label class="check">
-                <input type="checkbox" id="email_lancamento" name="email_lancamento" value="sim" />
-                <span>Sim, quero receber um aviso sobre o lançamento.</span>
-              </label>
-              <label class="check">
-                <input type="checkbox" id="email_atualizacoes" name="email_atualizacoes" value="sim" />
-                <span>Sim, quero receber atualizações sobre o app.</span>
-              </label>
-            </div>
+          <div class="checks" role="group" aria-label="Consentimento de WhatsApp">
+            <label class="check">
+              <input type="checkbox" id="whats_lancamento" name="whats_lancamento" value="sim" />
+              <span>Quero receber o aviso de lançamento por WhatsApp.</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" id="whats_atualizacoes" name="whats_atualizacoes" value="sim" />
+              <span>Também quero receber atualizações por WhatsApp.</span>
+            </label>
           </div>
+        </div>
 
-          <div class="channel" id="ch-whats">
-            <h3>WhatsApp</h3>
-            <p class="hint">Se preferir, também podemos avisar por WhatsApp.</p>
-            <div class="field">
-              <label for="whatsapp" class="sr-only">Número com DDD</label>
-              <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel-national" placeholder="(11) 91234-5678" maxlength="16" />
-              <span class="err">Informe um número válido com DDD.</span>
-            </div>
-            <div class="checks" role="group" aria-label="Preferências de WhatsApp">
-              <label class="check">
-                <input type="checkbox" id="whats_lancamento" name="whats_lancamento" value="sim" />
-                <span>Sim, quero receber aviso de quando o app for lançado.</span>
-              </label>
-              <label class="check">
-                <input type="checkbox" id="whats_atualizacoes" name="whats_atualizacoes" value="sim" />
-                <span>Sim, quero receber atualizações sobre o app.</span>
-              </label>
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- Honeypot anti-spam -->
+        <!-- Honeypot -->
         <div aria-hidden="true" style="position:absolute; left:-9999px; top:-9999px;">
           <label>Se você é humano, deixe em branco
             <input type="text" name="empresa_hp" tabindex="-1" autocomplete="off" />
@@ -551,7 +1104,7 @@
         </div>
 
         <div class="cta-wrap">
-          <button type="submit" class="cta" id="submit-btn">Quero acompanhar o lançamento</button>
+          <button type="submit" class="cta" id="submit-btn">Entrar na lista de espera</button>
           <p class="consent">
             Ao enviar, você concorda com o uso dos seus dados exclusivamente para comunicações sobre o lançamento e atualizações da Soci, conforme a LGPD. Você pode pedir a remoção a qualquer momento.
           </p>
@@ -559,32 +1112,113 @@
       </form>
 
       <aside id="success" class="success" role="status" aria-live="polite">
-        <span class="kicker">Cadastro confirmado</span>
+        <span class="kicker"><span class="pulse" aria-hidden="true"></span>Cadastro confirmado</span>
         <h2>Está combinado.</h2>
-        <p>Assim que a Soci abrir as portas, você será uma das primeiras pessoas a saber — pelos canais que você escolheu. Obrigado por querer construir isso com a gente.</p>
+        <p>Quando a Soci abrir as portas, você será uma das primeiras pessoas a saber — pelos canais que escolheu. Obrigado por querer construir isso com a gente.</p>
+        <a class="btn btn-secondary next" href="https://versao-waitlist.vercel.app" target="_blank" rel="noopener noreferrer">
+          Enquanto espera, conheça a vitrine <span aria-hidden="true">↗</span>
+        </a>
       </aside>
-    </section>
+    </div>
+  </section>
 
-    <footer>
-      <span class="brand">Soci · 2026</span>
-      <span>Seus dados são tratados conforme a LGPD e nunca compartilhados com terceiros.</span>
-    </footer>
-  </main>
+</main>
+
+<footer class="site">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <a class="mark" href="/" aria-label="Soci">
+        <span>Soci</span><span class="dot" aria-hidden="true"></span>
+      </a>
+      <span class="value">Rede social de quem constrói junto.</span>
+    </div>
+    <div class="foot-col">
+      <span class="label">Lançamento</span>
+      <span class="value">9 de maio, 2026</span>
+    </div>
+    <div class="foot-col">
+      <span class="label">Acompanhe</span>
+      <div class="foot-social">
+        <a href="#" aria-label="Instagram (em breve)" title="Em breve">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+          </svg>
+        </a>
+        <a href="#" aria-label="LinkedIn (em breve)" title="Em breve">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M8 10V17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="8" cy="7.5" r="0.9" fill="currentColor"/>
+            <path d="M12 17V13C12 11.34 13.34 10 15 10C16.66 10 17 11.34 17 13V17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>Soci · 2026</span>
+    <span>Seus dados são tratados conforme a LGPD e nunca compartilhados com terceiros.</span>
+  </div>
+</footer>
 
 <script>
   // ===== CONFIG =====
-  // Cole aqui a URL do Web App do Google Apps Script depois de publicar.
-  // Ver passo a passo em SETUP.md.
   const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxUojIyQAxgid5alNeC4MLBf588p13ETSDhEeCFbto4x8rE-SbdgYamXI-rRGkgd7JNlA/exec";
 
-  // ===== Helpers =====
   const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+  // Topbar shadow on scroll
+  const topbar = $("#topbar");
+  const onScroll = () => topbar.classList.toggle("scrolled", window.scrollY > 8);
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  // ===== Switch demo =====
+  const deck = $("#sw-deck");
+  const pills = $$(".sw-pill");
+  const order = ["front","mid","back"];
+  function setActive(targetId){
+    const cards = Array.from(deck.querySelectorAll(".sw-card"));
+    const n = cards.length;
+    cards.forEach(c => {
+      const id = Number(c.dataset.id);
+      const offset = (id - targetId + n) % n;
+      c.dataset.pos = order[offset] || "back";
+    });
+    pills.forEach(p => p.setAttribute("aria-pressed", String(Number(p.dataset.target) === targetId)));
+  }
+  pills.forEach(p => p.addEventListener("click", () => setActive(Number(p.dataset.target))));
+  // Auto-rotate (sem reduced motion)
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches){
+    let cur = 0;
+    let timer = setInterval(() => {
+      cur = (cur + 1) % 3;
+      setActive(cur);
+    }, 4200);
+    deck.parentElement.addEventListener("mouseenter", () => clearInterval(timer));
+    pills.forEach(p => p.addEventListener("click", () => clearInterval(timer)));
+  }
+
+  // ===== WhatsApp toggle =====
+  const wToggle = $("#toggle-whats");
+  const wPanel = $("#whats-panel");
+  wToggle.addEventListener("click", () => {
+    const open = wPanel.classList.toggle("open");
+    wPanel.hidden = !open;
+    wToggle.setAttribute("aria-expanded", String(open));
+    if (open){ setTimeout(() => $("#whatsapp")?.focus(), 60); }
+  });
+
+  // ===== Form =====
   const form = $("#waitlist");
   const btn  = $("#submit-btn");
   const banner = $("#banner-erro");
   const successBox = $("#success");
 
-  // Máscara telefone BR: (DD) 9XXXX-XXXX ou (DD) XXXX-XXXX
+  // Máscara telefone BR
   const tel = $("#whatsapp");
   tel.addEventListener("input", () => {
     let v = tel.value.replace(/\D/g,"").slice(0,11);
@@ -605,61 +1239,30 @@
     el.setAttribute("aria-invalid", invalid ? "true" : "false");
     el.closest(".field")?.classList.toggle("invalid", invalid);
   }
-
-  function isEmailValid(v){
-    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-  }
+  function isEmailValid(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
   function digits(s){ return (s||"").replace(/\D/g,""); }
 
   function validate(data){
     let ok = true;
     const problems = [];
-    setInvalid("nome", false);
-    setInvalid("idade", false);
-    setInvalid("origem", false);
-    setInvalid("email", false);
-    setInvalid("whatsapp", false);
+    ["nome","email","origem","whatsapp"].forEach(id => setInvalid(id, false));
 
     if (!data.nome || data.nome.length < 2){ setInvalid("nome", true); ok=false; problems.push("nome"); }
-
-    const idadeNum = Number(data.idade);
-    if (!Number.isFinite(idadeNum) || idadeNum < 13 || idadeNum > 120){
-      setInvalid("idade", true); ok=false; problems.push("idade");
-    }
-
+    if (!data.email || !isEmailValid(data.email)){ setInvalid("email", true); ok=false; problems.push("email"); }
     if (!data.origem){ setInvalid("origem", true); ok=false; problems.push("origem"); }
 
     const quaisquerEmail = data.email_lancamento || data.email_atualizacoes;
     const quaisquerWhats = data.whats_lancamento || data.whats_atualizacoes;
 
-    // Precisa escolher ao menos um canal
-    if (!quaisquerEmail && !quaisquerWhats){
-      ok = false;
-      problems.push("canal");
-    }
+    if (!quaisquerEmail && !quaisquerWhats){ ok=false; problems.push("canal"); }
 
-    // Se marcou e-mail → precisa e-mail válido
-    if (quaisquerEmail){
-      if (!data.email || !isEmailValid(data.email)){
-        setInvalid("email", true); ok=false; problems.push("email");
-      }
-    } else if (data.email && !isEmailValid(data.email)){
-      setInvalid("email", true); ok=false; problems.push("email");
-    }
-
-    // Se marcou WhatsApp → precisa número 10-11 dígitos
     if (quaisquerWhats){
       const d = digits(data.whatsapp);
-      if (d.length < 10 || d.length > 11){
-        setInvalid("whatsapp", true); ok=false; problems.push("whatsapp");
-      }
+      if (d.length < 10 || d.length > 11){ setInvalid("whatsapp", true); ok=false; problems.push("whatsapp"); }
     } else if (data.whatsapp){
       const d = digits(data.whatsapp);
-      if (d.length && (d.length < 10 || d.length > 11)){
-        setInvalid("whatsapp", true); ok=false; problems.push("whatsapp");
-      }
+      if (d.length && (d.length < 10 || d.length > 11)){ setInvalid("whatsapp", true); ok=false; problems.push("whatsapp"); }
     }
-
     return { ok, problems };
   }
 
@@ -669,7 +1272,7 @@
     const isOn = k => form.elements[k]?.checked ? "sim" : "";
     return {
       nome: get("nome"),
-      idade: get("idade"),
+      idade: "",
       origem: get("origem"),
       email: get("email"),
       email_lancamento: isOn("email_lancamento"),
@@ -685,21 +1288,15 @@
     };
   }
 
-  function showBanner(msg){
-    banner.textContent = msg;
-    banner.classList.add("show");
-  }
-  function hideBanner(){
-    banner.classList.remove("show");
-  }
+  function showBanner(msg){ banner.textContent = msg; banner.classList.add("show"); }
+  function hideBanner(){ banner.classList.remove("show"); }
 
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
     hideBanner();
-
     const data = readForm();
 
-    // Honeypot: se preenchido, finge sucesso pra bot
+    // Honeypot
     if (data.empresa_hp){
       form.style.display = "none";
       successBox.classList.add("show");
@@ -710,33 +1307,26 @@
     if (!ok){
       const map = {
         nome: "informe seu nome",
-        idade: "informe uma idade válida",
-        origem: "selecione como conheceu a Soci",
         email: "e-mail inválido",
+        origem: "selecione como conheceu a Soci",
         whatsapp: "número de WhatsApp inválido",
         canal: "marque pelo menos uma opção de aviso (e-mail ou WhatsApp)"
       };
-      const primeiro = problems[0];
-      showBanner("Revise o formulário: " + (map[primeiro] || "campos obrigatórios"));
-      const firstInvalid = form.querySelector('[aria-invalid="true"]');
-      firstInvalid?.focus();
+      showBanner("Revise o formulário: " + (map[problems[0]] || "campos obrigatórios"));
+      form.querySelector('[aria-invalid="true"]')?.focus();
       return;
     }
 
-    // UI: loading
     btn.disabled = true;
     const originalLabel = btn.textContent;
     btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>Enviando…';
 
     try {
       if (!ENDPOINT_URL || ENDPOINT_URL.startsWith("__")){
-        // Sem endpoint configurado: persiste em localStorage + exibe sucesso.
-        // Troque ENDPOINT_URL no topo do arquivo quando publicar o Apps Script.
         const pendentes = JSON.parse(localStorage.getItem("soci_waitlist_pendentes") || "[]");
         pendentes.push(data);
         localStorage.setItem("soci_waitlist_pendentes", JSON.stringify(pendentes));
       } else {
-        // Envia pra Apps Script. Usamos text/plain pra evitar preflight CORS.
         await fetch(ENDPOINT_URL, {
           method: "POST",
           mode: "no-cors",
@@ -755,34 +1345,6 @@
     }
   });
 </script>
+
 </body>
 </html>
-
-
-  <style>
-        .mechanic-icon{
-                width: 56px !important;
-                height: 56px !important;
-                min-width: 56px;
-                border-radius: 14px;
-                background: #1A2544;
-                border: 1px solid #252B3C;
-                display: flex !important;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-                overflow: hidden;
-        }
-        .mechanic-icon svg{
-                width: 28px !important;
-                height: 28px !important;
-                flex-shrink: 0;
-        }
-        .mechanic-item{
-                display: flex !important;
-                flex-direction: row !important;
-                gap: 16px !important;
-                align-items: flex-start !important;
-        }
-      </style>
-  </style>
